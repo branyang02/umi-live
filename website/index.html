@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="UMI-Live is a bimanual hardware and software system for in-the-wild robot data collection and learning.">
+  <meta name="keywords" content="UMI-Live, bimanual robotics, robot learning, UMI, data collection">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UMI-Live for In-The-Wild Bimanual Robotics Data Collection</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" type="image/png" href="./static/images/umi-logo.png">
+
+  <script type="importmap">
+    {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js"}}
+  </script>
+
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+</head>
+<body>
+
+<section class="hero" id="top">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <p class="publication-kicker">A ROBOT-FREE DATA COLLECTION SYSTEM</p>
+          <h1 class="title is-1 publication-title">UMI-Live for In-The-Wild Bimanual Robotics Data Collection</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><strong>Govind Velamoor</strong><sup>1,*</sup>,</span>
+            <span class="author-block"><strong>Adrian Lin</strong><sup>2,*</sup>,</span>
+            <span class="author-block"><strong>Sam Jung</strong><sup>3</sup>,</span>
+            <span class="author-block"><strong>Spencer Mateega</strong><sup>3</sup>,</span>
+            <span class="author-block"><strong>Brandon Y. Yang</strong><sup>4,‡</sup>,</span>
+            <span class="author-block"><strong>Amish Sethi</strong><sup>5,†</sup></span>
+          </div>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>Yale University,</span>
+            <span class="author-block"><sup>2</sup>Carnegie Mellon University,</span>
+            <span class="author-block"><sup>3</sup>AfterQuery,</span>
+            <span class="author-block"><sup>4</sup>University of Pennsylvania,</span>
+            <span class="author-block"><sup>5</sup>Harvard University</span>
+          </div>
+          <div class="publication-authors"><small>* Equal first-author contribution. ‡ Equal advising. † Corresponding author.</small></div>
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <span class="link-block">
+                <a href="https://github.com/AfterQuery-Research/umi-flow" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fab fa-github"></i></span><span>UMI code</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://github.com/AfterQuery-Research/umi-teleop" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fab fa-github"></i></span><span>Teleop code</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://github.com/AfterQuery-Research/lerobot" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fab fa-github"></i></span><span>Policy training / inference</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://github.com/AfterQuery-Research/umi-flow#install" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fas fa-tools"></i></span><span>Hardware setup guide</span>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <video id="teaser" autoplay muted loop playsinline preload="metadata" poster="./static/images/teaser-poster.jpg" width="100%">
+        <source src="./static/videos/teaser.mp4" type="video/mp4">
+      </video>
+      <p class="teaser-caption">A handheld demonstration becomes a robot-ready dataset and real-world policy.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="abstract">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>Handheld Universal Manipulation Interface (UMI) devices let human experts demonstrate tasks directly. Preparing these demonstrations for learning still requires consistent hardware, calibration, and data processing. We present UMI-Live, a bimanual hardware and software system for in-the-wild collection and robot learning. Each gripper integrates camera and LiDAR–inertial sensing, onboard compute, and power, without external tracking equipment or calibration of the collection environment.</p>
+          <p>A single button controls recording while an asynchronous pipeline performs parallel and batched reconstruction and publishes validated LeRobot datasets. We evaluate π<sub>0.5</sub> and MolmoAct2 on placing six oranges in a bowl, with up to 10/10 and 8/10 successful trials, respectively. We release approximately 40 hours across three tasks and plan to release hardware designs, software, and reproduction guides at <a href="https://github.com/AfterQuery-Research/umi-live">the project repository</a>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section hardware-figure-section" id="hardware-components">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Hardware components</h2>
+    <figure class="exploded-figure">
+      <img src="./static/images/exploded-view.png" alt="Exploded CAD view of the UMI-Live handheld unit, labeling the camera, ArUco tag locations, redesigned gripper fingers, removable battery module, LiDAR, LCD screen, Raspberry Pi 5, and operator-facing buttons" loading="lazy">
+      <figcaption>Exploded CAD view of one UMI-Live unit with its main components labeled.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="section hardware-section" id="hardware-view">
+  <div class="container is-max-desktop hardware-feature hardware-feature--splat">
+    <div class="hardware-copy">
+      <h2 class="title is-3">Example 3D Gaussian Splat</h2>
+    </div>
+    <div class="splat-viewer" id="splat-viewer" role="region" aria-label="Draggable example 3D Gaussian splat on a white background">
+      <p class="splat-status" id="splat-status" role="status">Loading 3D view…</p>
+    </div>
+    <p class="splat-help">Drag to rotate; scroll to zoom. Temporary example scene by <a href="https://superspl.at/scene/7605a475" target="_blank" rel="noopener">smartdatascan</a>; this is not a UMI-Live reconstruction.</p>
+  </div>
+</section>
+
+<section class="section demos-section" id="videos">
+  <div class="container is-max-desktop">
+    <div class="demo-group">
+      <div class="demo-group-heading">
+        <span class="group-index">01</span>
+        <div><h3>Human demonstrations</h3><p>Bimanual tasks directly collected with the handheld UMI devices.</p></div>
+      </div>
+      <div class="demo-grid demo-grid--human">
+        <article class="video-card">
+          <video controls playsinline preload="none" poster="./static/images/grasp-poster.jpg"><source src="./static/videos/precision-grasping.mp4" type="video/mp4"></video>
+          <div class="video-caption"><h4>Small-object handling</h4><p>Close-up demonstration of precise grasping.</p></div>
+        </article>
+        <article class="video-card">
+          <video controls playsinline preload="none" poster="./static/images/match-poster.jpg"><source src="./static/videos/match-lighting.mp4" type="video/mp4"></video>
+          <div class="video-caption"><h4>Match lighting</h4><p>Bimanual match-lighting demonstration with the handheld UMI devices.</p></div>
+        </article>
+        <article class="video-card">
+          <video controls playsinline preload="none" poster="./static/images/shirt-poster.jpg"><source src="./static/videos/shirt-folding-timelapse.mp4" type="video/mp4"></video>
+          <div class="video-caption"><h4>Shirt folding</h4><p>Long-horizon bimanual collection, shown as a time-lapse.</p></div>
+        </article>
+      </div>
+    </div>
+
+    <div class="demo-group">
+      <div class="demo-group-heading">
+        <span class="group-index">02</span>
+        <div><h3>Recorded demonstrations</h3><p>Each clip pairs a human task recording with synchronized wrist-camera views and the gripper motion reconstructed from it.</p></div>
+      </div>
+      <div class="episode-grid">
+        <article class="video-card video-card--episode">
+          <video controls playsinline preload="none" poster="./static/images/teaser-fruit-poster.jpg">
+            <source src="./static/videos/fruit-episode.mp4" type="video/mp4">
+          </video>
+          <div class="video-caption"><h4>Fruit handling</h4><p>A fruit-task recording, shown alongside its wrist-camera views and reconstructed gripper motion.</p></div>
+        </article>
+        <article class="video-card video-card--episode">
+          <video controls playsinline preload="none" poster="./static/images/bottle-poster.jpg">
+            <source src="./static/videos/bottle-episode.mp4" type="video/mp4">
+          </video>
+          <div class="video-caption"><h4>Bottle handling</h4><p>A second task example with the recorded camera views and reconstructed gripper motion shown together.</p></div>
+        </article>
+      </div>
+      <div class="dataset-explorer">
+        <div class="dataset-explorer-heading">
+          <div><h3>Explore a LeRobot episode</h3></div>
+          <a href="https://huggingface.co/spaces/lerobot/visualize_dataset?path=%2Fbrandonyang%2Fumi-live-dataset%2Fepisode_0%3Ft%3D4" target="_blank" rel="noopener">Open full viewer ↗</a>
+        </div>
+        <div class="dataset-embed">
+          <iframe src="https://lerobot-visualize-dataset.hf.space/?path=%2Fbrandonyang%2Fumi-live-dataset%2Fepisode_0%3Ft%3D4" title="LeRobot dataset visualizer: UMI-Live episode 0 at t=4" loading="lazy" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-heading">
+      <h2 class="title is-2">Experiments</h2>
+    </div>
+    <div class="demo-group">
+      <div class="demo-group-heading">
+        <span class="group-index">03</span>
+        <div><h3>Policy training and evaluation</h3><p>π0.5 + RTC uses local inference; all other policy rollouts shown here use remote inference.</p></div>
+      </div>
+      <div class="demo-grid demo-grid--two">
+        <article class="video-card">
+          <video controls playsinline preload="none" poster="./static/images/orange-autonomous-img9527-poster.jpg"><source src="./static/videos/orange-autonomous-img9527.mp4" type="video/mp4"></video>
+          <div class="video-caption"><h4>π0.5 + RTC × UMI-Live</h4><p>Local inference. Autonomous rollout; all six oranges finish in the bowl.</p></div>
+        </article>
+        <article class="video-card">
+          <video controls playsinline preload="none" poster="./static/images/orange-wrist-cams-only-poster.jpg"><source src="./static/videos/orange-wrist-cams-only.mp4" type="video/mp4"></video>
+          <div class="video-caption"><h4>MolmoAct × UMI-Live</h4><p>Wrist-camera-only rollout; one orange remains on the table.</p></div>
+        </article>
+        <article class="video-card">
+          <video controls playsinline preload="none" poster="./static/images/orange-pi05-no-top-poster.jpg"><source src="./static/videos/orange-pi05-no-top-trimmed.mp4" type="video/mp4"></video>
+          <div class="video-caption"><h4>π0.5 × UMI-Live</h4><p>Rollout without the top camera; an operator adjustment is visible.</p></div>
+        </article>
+        <article class="video-card">
+          <video controls playsinline preload="none" poster="./static/images/orange-eval-img8534-poster.jpg"><source src="./static/videos/orange-eval-img8534-trimmed.mp4" type="video/mp4"></video>
+          <div class="video-caption"><h4>MolmoAct × UMI-Live</h4><p>Operator interaction is visible; the run ends before all oranges are placed.</p></div>
+        </article>
+      </div>
+    </div>
+
+    <div class="demo-group">
+      <div class="section-heading">
+        <h3 class="title is-3 has-text-centered">Teleoperation setup</h3>
+      </div>
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <div class="content has-text-justified">
+            <p>For teleoperation, VIVE trackers replace the LiDAR on each UMI gripper, and Lighthouse base stations track their pose. After tracker-to-robot alignment and a captured reference pose, UMI motion sets Cartesian targets for each YAM arm; inverse kinematics converts them to joint commands. Wrist-camera ArUco tags provide gripper opening.</p>
+          </div>
+        </div>
+      </div>
+      <div class="demo-grid demo-grid--two">
+        <article class="video-card">
+          <video controls playsinline preload="none" poster="./static/images/orange-teleop-poster.jpg"><source src="./static/videos/orange-teleop.mp4" type="video/mp4"></video>
+          <div class="video-caption"><h4>Teleoperated orange task</h4><p>The corresponding dual-arm YAM task, controlled from the handheld setup.</p></div>
+        </article>
+        <article class="video-card">
+          <video controls playsinline preload="none" poster="./static/images/robot-match-poster.jpg"><source src="./static/videos/robot-match-action.mp4" type="video/mp4"></video>
+          <div class="video-caption"><h4>Robot match-lighting task</h4><p>The dual YAM arms approach, grasp, and move the matchbox using the teleoperation setup above.</p></div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="citation-section" id="BibTeX">
+  <div class="container is-max-desktop">
+    <h2 class="title is-4">BibTeX</h2>
+    <div class="citation-details">
+    <pre><code>@article{velamoor2026umilive,
+  author  = {Velamoor, Govind and Lin, Adrian and Jung, Sam and
+             Mateega, Spencer and Yang, Brandon Y. and Sethi, Amish},
+  title   = {UMI-Live for In-The-Wild Bimanual Robotics Data Collection},
+  year    = {2026}
+}</code></pre>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container content has-text-centered">
+    <p>This page is adapted from the <a href="https://github.com/nerfies/nerfies.github.io">Nerfies project website</a>, licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+  </div>
+</footer>
+
+<script type="module" src="./static/js/splat-viewer.js"></script>
+</body>
+</html>
