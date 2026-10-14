@@ -18,7 +18,7 @@ The other clips are derived from videos in `~/Desktop/umi assets/` and encoded a
 - `bottle-episode.mp4`: synchronized bottle episode.
 - `shirt-folding-timelapse.mp4`: shirt-folding session sped up 16x.
 - `match-lighting-normal-speed.mp4`: a 52.4-second normal-speed segment from the original match-lighting demonstration.
-- `precision-grasping.mp4`: shortened small-object handling clip, sped up 1.25x.
+- `precision-grasping-normal-speed.mp4`: the original-speed segment of the small-object handling clip.
 - `orange-wrist-cams-only.mp4`: the full `IMG_1684.MOV` camera-ablation clip at normal speed.
 - `orange-pi05-no-top.mp4`: the full `IMG_1686.MOV` π0.5 camera-ablation clip at normal speed.
 - `orange-eval-img8534.mp4`: the new frontal orange-placement trial at normal speed. An operator enters the workspace and the clip ends before all oranges are placed.
