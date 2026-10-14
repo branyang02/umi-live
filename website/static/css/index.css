@@ -48,6 +48,16 @@ body {
   color: var(--muted);
 }
 
+.publication-authors a {
+  color: inherit;
+  text-decoration-color: #b8d4d1;
+  text-underline-offset: .16em;
+}
+
+.publication-authors a:hover {
+  color: var(--teal);
+}
+
 .author-block {
   display: inline-block;
   margin-right: .16rem;
