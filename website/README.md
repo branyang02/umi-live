@@ -17,7 +17,7 @@ The other clips are derived from videos in `~/Desktop/umi assets/` and encoded a
 - `fruit-episode.mp4`: the original synchronized fruit episode with wrist-camera views and trajectory visualization; retained as a separate clip when it was replaced as the page's hero teaser.
 - `bottle-episode.mp4`: synchronized bottle episode.
 - `shirt-folding-timelapse.mp4`: shirt-folding session sped up 16x.
-- `match-lighting-normal-speed.mp4`: a 52.4-second normal-speed segment from the original match-lighting demonstration.
+- `match-lighting-from-12s.mp4`: a 40.4-second, normal-speed match-lighting segment beginning 12 seconds into the original recording.
 - `precision-grasping-normal-speed.mp4`: the original-speed segment of the small-object handling clip.
 - `orange-wrist-cams-only.mp4`: the full `IMG_1684.MOV` camera-ablation clip at normal speed.
 - `orange-pi05-no-top.mp4`: the full `IMG_1686.MOV` π0.5 camera-ablation clip at normal speed.
