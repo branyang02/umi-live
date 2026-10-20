@@ -8,6 +8,16 @@ Serve the page locally from the repository root:
 python3 -m http.server 8765 --directory website
 ```
 
+## Hardware directory
+
+`hardware.html` is the UMI-Live Hardware resource directory, accessed through the homepage's **Hardware setup guide** button and hardware-components section. It shares the site's base styles, with page-specific styles in `static/css/hardware.css`. Native expandable document previews work without JavaScript; `static/js/hardware.js` also opens a preview when its directory link or URL fragment is followed.
+
+The directory follows the draft source organization reviewed on 2026-10-20: the parts workbook has `Off the Shelf` and `3D Printed` tabs; the assembly PDF combines mechanical assembly, wiring, power checks, and final inspection; a separate PDF supplies printable ArUco tags; CAD folders separate UMI-Live and I2RT YAM accessories. The YAM finger backbones and pads reuse UMI-Live files. Software setup is a separate repository handoff.
+
+This is a preliminary view test, not a finalized hardware release. It links to the authorized draft Drive files and embeds the v5 assembly PDF, both spreadsheet tabs, and the printable tag PDF. The embedded sources have anyone-with-link reader access; no sharing settings are changed. Direct-open links remain available if a browser blocks a preview. CAD files stay in Drive rather than being duplicated in this repository.
+
+When updating resources, edit the corresponding card links and preview URLs in `hardware.html`, plus the displayed version and source-check date. Updates to a Google file with the same ID appear in its live preview; replacing it with a new file ID requires updating this page. Folder links continue to show their current contents. Preserve per-part print overrides and distinguish build quantities from fractions of purchased packs. The folder does not yet include a separate YAM assembly guide, slicer-profile download, or release manifest; do not imply that these exist.
+
 ## Video assets
 
 The opening teaser is an approximately 16-second, step-by-step animation of Figure 1 from the camera-ready Overleaf project `6acd3f78f81551cc5346d095` (source commit `8bf87321f65175207f96d9879669f2c3147ff0d2`). It is rebuilt from the figure's actual image assets plus editable labels, cards, and arrows; it is not cut from a PDF screenshot. It reveals the six existing panels in order, holds each step for about 2.4 seconds, and finishes on the complete figure. The robot evaluation image is illustrative; the linked orange-placement video is a π0.5 rollout, not a MolmoAct2 rollout. Source asset paths and processing notes are in `static/images/teaser-components/SOURCES.md`; the paper checkout is not modified.
