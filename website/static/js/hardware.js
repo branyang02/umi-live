@@ -1,4 +1,4 @@
-// Reveal a document when a directory link or a shared URL targets its preview.
+// Reveal a document when a section link or a shared URL targets its preview.
 function revealHardwarePreview() {
   const preview = document.getElementById(window.location.hash.slice(1));
   if (preview instanceof HTMLDetailsElement) {

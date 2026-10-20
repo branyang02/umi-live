@@ -8,17 +8,19 @@ Serve the page locally from the repository root:
 python3 -m http.server 8765 --directory website
 ```
 
-## Hardware directory
+## Hardware reproduction guide
 
-`hardware.html` is the UMI-Live Hardware resource directory, accessed through the homepage's **Hardware setup guide** button and hardware-components section. It shares the site's base styles, with page-specific styles in `static/css/hardware.css`. Native expandable document previews work without JavaScript; `static/js/hardware.js` also opens a preview when its directory link or URL fragment is followed.
+`hardware.html` is the UMI-Live hardware reproduction guide, accessed through the homepage's **Hardware setup guide** button and hardware-components section. It shares the site's base styles, with page-specific styles in `static/css/hardware.css`. Native expandable document previews work without JavaScript; `static/js/hardware.js` also opens a preview when its section link or URL fragment is followed.
 
-Keep the directory consistent with the homepage's Bulma base, 960px desktop content width, Google Sans/Noto Sans typography, shared color variables, and Nerfies template attribution. Keep page-specific CSS and JavaScript separate so changes to the directory do not affect the homepage. The page is plain static HTML and needs no additional build step or dependencies.
+Keep the guide consistent with the homepage's Bulma base, 960px desktop content width, Google Sans/Noto Sans typography, shared color variables, and Nerfies template attribution. Keep page-specific CSS and JavaScript separate so changes to the guide do not affect the homepage. The page is plain static HTML and needs no additional build step or dependencies.
 
-The directory follows the draft source organization reviewed on 2026-10-20: the parts workbook has `Off the Shelf` and `3D Printed` tabs; the assembly PDF combines mechanical assembly, wiring, power checks, and final inspection; a separate PDF supplies printable ArUco tags; CAD folders separate UMI-Live and I2RT YAM accessories. The YAM finger backbones and pads reuse UMI-Live files. Software setup is a separate repository handoff.
+The page follows the build in order: source parts, print components, assemble and wire, then configure and test. Source documents sit within the corresponding step; the parts list, print settings, and assembly guide are expanded by default. The printable tag sheet is part of assembly, and robot-side YAM accessories are an optional section. Avoid adding a separate card directory that duplicates these sections.
+
+The guide follows the draft source organization reviewed on 2026-10-20: the parts workbook has `Off the Shelf` and `3D Printed` tabs; the assembly PDF combines mechanical assembly, wiring, power checks, and final inspection; a separate PDF supplies printable ArUco tags; CAD folders separate UMI-Live and I2RT YAM accessories. The YAM finger backbones and pads reuse UMI-Live files. Software setup is a separate repository handoff.
 
 This is a preliminary view test, not a finalized hardware release. It links to the authorized draft Drive files and embeds the v5 assembly PDF, both spreadsheet tabs, and the printable tag PDF. The embedded sources have anyone-with-link reader access; no sharing settings are changed. Direct-open links remain available if a browser blocks a preview. CAD files stay in Drive rather than being duplicated in this repository.
 
-When updating resources, edit the corresponding card links and preview URLs in `hardware.html`, plus the displayed version and source-check date. Updates to a Google file with the same ID appear in its live preview; replacing it with a new file ID requires updating this page. Folder links continue to show their current contents. Preserve per-part print overrides and distinguish build quantities from fractions of purchased packs. The folder does not yet include a separate YAM assembly guide, slicer-profile download, or release manifest; do not imply that these exist.
+When updating resources, edit the corresponding section links and preview URLs in `hardware.html`, plus the displayed version and source-check date. Updates to a Google file with the same ID appear in its live preview; replacing it with a new file ID requires updating this page. Folder links continue to show their current contents. Preserve per-part print overrides and distinguish build quantities from fractions of purchased packs. The folder does not yet include a separate YAM assembly guide, slicer-profile download, or release manifest; do not imply that these exist.
 
 ## Video assets
 

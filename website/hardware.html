@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Preliminary UMI-Live hardware resources: assembly instructions, 3D-printable files, print settings, parts sourcing, wiring, and calibration.">
+  <meta name="description" content="UMI-Live hardware reproduction guide: assembly instructions, 3D-printable files, print settings, parts sourcing, wiring, and calibration.">
   <title>UMI-Live Hardware</title>
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
   <link rel="stylesheet" href="./static/css/bulma.min.css">
@@ -24,10 +24,10 @@
   <main id="main">
     <section class="hardware-intro hardware-container" aria-labelledby="page-title">
       <div>
-        <p class="section-kicker">BUILD RESOURCES</p>
+        <p class="section-kicker">HARDWARE REPRODUCTION GUIDE</p>
         <h1 id="page-title">UMI-Live Hardware</h1>
-        <p class="hardware-lead">A directory for recreating the UMI-Live hardware. Find the parts, printable files, settings, and instructions for every stage of the build.</p>
-        <a class="directory-link" href="#resources">Browse the directory <span aria-hidden="true">&darr;</span></a>
+        <p class="hardware-lead">Build the UMI-Live hardware from parts to a working unit. Follow the steps below for sourcing, 3D printing, assembly, wiring, and setup.</p>
+        <a class="guide-link" href="#parts">Start the build <span aria-hidden="true">&darr;</span></a>
       </div>
       <figure class="hardware-overview">
         <img src="./static/images/exploded-view.png" alt="Exploded view of a UMI-Live handheld unit, showing its gripper, camera, LiDAR, compute, and battery components" width="1000" height="1000">
@@ -36,94 +36,113 @@
     </section>
 
     <div class="hardware-container">
-      <aside class="release-notice" aria-label="Resource availability">
+      <aside class="release-notice" aria-label="Guide status">
         <span class="release-label">Preliminary preview</span>
         <p>These files and instructions are drafts for review and testing, and will continue to change. This is not a finalized hardware release. <a href="https://drive.google.com/drive/folders/1TpTJQBPQSI797XXm9xJsUElVNWArdHAx" target="_blank" rel="noopener noreferrer">Open the complete resource folder &nearr;</a></p>
       </aside>
     </div>
 
-    <section class="hardware-resources hardware-container" id="resources" aria-labelledby="resources-title">
-      <div class="directory-heading">
-        <div><p class="section-kicker">THE RESOURCE DIRECTORY</p><h2 id="resources-title">From parts to a working pair</h2></div>
-        <p>Source, print, assemble, then configure.</p>
-      </div>
-      <nav class="directory-nav" aria-label="Hardware resources">
-        <a href="#parts">Parts &amp; sourcing</a><a href="#files">3D printing &amp; CAD</a><a href="#assembly">Assembly guide</a><a href="#tags">ArUco tags</a><a href="#yam">YAM accessories</a><a href="#software">Software setup</a>
-      </nav>
+    <nav class="build-nav hardware-container" id="resources" aria-label="Build steps">
+      <a href="#parts">1. Source parts</a>
+      <a href="#files">2. Print components</a>
+      <a href="#assembly">3. Assemble &amp; wire</a>
+      <a href="#software">4. Configure &amp; test</a>
+      <a href="#yam">I2RT YAM hardware</a>
+    </nav>
 
-      <!-- Source links intentionally point to the live draft resources in Google Drive. -->
-      <div class="resource-grid">
-        <article class="resource-card" id="parts">
-          <div class="resource-meta"><span class="resource-number">01 / SOURCE</span><span class="resource-status">Draft sheet</span></div>
-          <h3>Parts &amp; sourcing</h3>
-          <p>The parts spreadsheet's <strong>Off the Shelf</strong> tab brings together purchased components, supplier links, quantities, notes, and estimated costs.</p>
-          <ul><li>Electronics, power, wiring, and mechanical parts</li><li>Tapes, tags, fastener assortments, and filament</li><li>Optional items and pack-size notes</li></ul>
-          <div class="resource-actions"><a href="#parts-preview">Preview parts list</a><a href="https://docs.google.com/spreadsheets/d/1lpBRnUCwfG8htZ-RfftRbJUnZEhj3iX3Kp_QXd36MX4/preview?gid=0#gid=0" target="_blank" rel="noopener noreferrer">Open spreadsheet &nearr;</a></div>
-        </article>
-        <article class="resource-card" id="files">
-          <div class="resource-meta"><span class="resource-number">02 / PRINT</span><span class="resource-status">Draft files</span></div>
-          <h3>3D printing &amp; CAD</h3>
-          <p>UMI-Live STL files and the STEP assembly, paired with the parts spreadsheet's <strong>3D Printed</strong> tab.</p>
-          <ul><li>Default print settings and per-part slicer overrides</li><li>Supports, brim guidance, materials, and quantities</li><li>Filament estimates grouped by material</li></ul>
-          <div class="resource-actions"><a href="https://drive.google.com/drive/folders/1aSERmILqNbNlvU1tP3zWQT07wcUmmdxc" target="_blank" rel="noopener noreferrer">STL files &nearr;</a><a href="https://drive.google.com/drive/folders/1J5adTWDS-Il32CPbCDhqkBn5mkC3Nm9l" target="_blank" rel="noopener noreferrer">STEP assembly &nearr;</a><a href="#printing-preview">Preview print settings</a></div>
-        </article>
-        <article class="resource-card" id="assembly">
-          <div class="resource-meta"><span class="resource-number">03 / ASSEMBLE</span><span class="resource-status">Draft v5 &middot; PDF</span></div>
-          <h3>Assembly, wiring &amp; checks</h3>
-          <p>One illustrated hardware guide covers preparation, mechanical assembly, electronics, the battery pack, and final inspection.</p>
-          <ul><li>Tools, part-code references, and assembly steps</li><li>LCD/button pin map and battery circuit diagram</li><li>Power-output testing and final hardware checklist</li></ul>
-          <div class="resource-actions"><a href="#guide-preview">Read assembly guide</a><a href="https://drive.google.com/file/d/1x5-WaLqtIgZhZTC2jW24R4-Qqvde7_h9/view" target="_blank" rel="noopener noreferrer">Open PDF &nearr;</a></div>
-        </article>
-        <article class="resource-card" id="tags">
-          <div class="resource-meta"><span class="resource-number">PRINTABLE REFERENCE</span><span class="resource-status">Draft PDF</span></div>
-          <h3>ArUco tag sheet</h3>
-          <p>A dedicated, print-ready PDF for the physical finger tags. Placement and ID configuration are covered in the assembly guide.</p>
-          <ul><li>Tag patterns with individual ID labels</li><li>Actual-size printing and a scale-check ruler</li><li>Cut outlines and white-margin requirements</li></ul>
-          <div class="resource-actions"><a href="#tags-preview">Preview tag sheet</a><a href="https://drive.google.com/file/d/19DiKg10A1ViMvCTIxdkUXhvksLtead8F/view" target="_blank" rel="noopener noreferrer">Open printable PDF &nearr;</a></div>
-        </article>
-        <article class="resource-card" id="yam">
-          <div class="resource-meta"><span class="resource-number">ROBOT ACCESSORIES</span><span class="resource-status">Draft files</span></div>
-          <h3>I2RT YAM accessories</h3>
-          <p>Robot-side camera mount and finger-holder files, kept separate from the handheld UMI-Live build.</p>
-          <ul><li>YAM-specific STL and STEP files</li><li>YAM print settings in the 3D Printed tab</li><li>Shared finger backbones and pads from UMI-Live</li></ul>
-          <div class="resource-actions"><a href="https://drive.google.com/drive/folders/16nqxxOQhA5n1YojcbUWS6ieyay3F7Am8" target="_blank" rel="noopener noreferrer">YAM STL files &nearr;</a><a href="https://drive.google.com/drive/folders/1EYAgEG3YlASO0E8-9rsuuEtYtZreYz7t" target="_blank" rel="noopener noreferrer">YAM STEP files &nearr;</a><a href="#printing-preview">Print settings</a></div>
-        </article>
-        <article class="resource-card" id="software">
-          <div class="resource-meta"><span class="resource-number">04 / CONFIGURE</span><span class="resource-status">Separate guide</span></div>
-          <h3>Software setup &amp; calibration</h3>
-          <p>The hardware guide ends after assembly and inspection. Continue in the software repository for provisioning, calibration, and operational testing.</p>
-          <ul><li>Client and server installation</li><li>Camera and gripper calibration</li><li>Service verification and recording</li></ul>
-          <a class="directory-link" href="https://github.com/AfterQuery-Research/umi-live#install">Open software setup <span aria-hidden="true">&nearr;</span></a>
-        </article>
+    <!-- Keep the live source documents beside the build steps they support. -->
+    <section class="build-section hardware-container" id="parts" aria-labelledby="parts-title">
+      <p class="section-kicker">STEP 01</p>
+      <h2 id="parts-title">Source the parts</h2>
+      <div class="build-copy">
+        <p>The hardware guide builds <strong>one handheld UMI-Live unit</strong>. For a bimanual setup, plan for two units. Use the <strong>Off the Shelf</strong> tab below to source the electronics, power components, wiring, mechanical parts, fasteners, and consumables.</p>
+        <p>Follow the supplier links and purchase notes in the sheet. Check pack sizes and optional items before ordering: fractions of purchased packs describe material used, not the number of packs to buy.</p>
       </div>
+      <details class="document-preview" id="parts-preview" open>
+        <summary>Parts &amp; sourcing <span>Off the Shelf &middot; spreadsheet</span></summary>
+        <div class="preview-toolbar"><p>Supplier links, purchase notes, quantities, and estimated costs.</p><a href="https://docs.google.com/spreadsheets/d/1lpBRnUCwfG8htZ-RfftRbJUnZEhj3iX3Kp_QXd36MX4/preview?gid=0#gid=0" target="_blank" rel="noopener noreferrer">Open parts spreadsheet &nearr;</a></div>
+        <iframe src="https://docs.google.com/spreadsheets/d/1lpBRnUCwfG8htZ-RfftRbJUnZEhj3iX3Kp_QXd36MX4/preview?gid=0&amp;rm=minimal#gid=0" title="Parts list: Off the Shelf spreadsheet preview" loading="lazy"></iframe>
+      </details>
     </section>
 
-    <section class="hardware-previews hardware-container" aria-labelledby="previews-title">
-      <p class="section-kicker">READ THE SOURCE MATERIAL</p>
-      <h2 id="previews-title">Documents &amp; print settings</h2>
-      <p class="preview-intro">Open a preview below, or use its direct link for a larger view and download controls. These previews display the draft files hosted in Google Drive.</p>
+    <section class="build-section hardware-container" id="files" aria-labelledby="files-title">
+      <p class="section-kicker">STEP 02</p>
+      <h2 id="files-title">Print the UMI-Live components</h2>
+      <div class="build-copy">
+        <ol>
+          <li>Download the UMI-Live STL files for printing. Use the STEP assembly when you need to inspect the CAD or adapt a part.</li>
+          <li>Read the default settings at the top of the <strong>3D Printed</strong> tab, then apply each part's material, support, brim, and slicer overrides. Use the listed quantities for your build.</li>
+          <li>Print the components and remove and clean all support material before assembly. The assembly guide's illustrated parts list helps identify each printed part.</li>
+        </ol>
+      </div>
+      <div class="build-links">
+        <a href="https://drive.google.com/drive/folders/1aSERmILqNbNlvU1tP3zWQT07wcUmmdxc" target="_blank" rel="noopener noreferrer">Download UMI-Live STL files &nearr;</a>
+        <a href="https://drive.google.com/drive/folders/1J5adTWDS-Il32CPbCDhqkBn5mkC3Nm9l" target="_blank" rel="noopener noreferrer">Open STEP assembly &nearr;</a>
+      </div>
+      <details class="document-preview" id="printing-preview" open>
+        <summary>Print settings &amp; quantities <span>3D Printed &middot; spreadsheet</span></summary>
+        <div class="preview-toolbar"><p>Read the default settings and each part's overrides. YAM accessories are listed below UMI-Live parts.</p><a href="https://docs.google.com/spreadsheets/d/1lpBRnUCwfG8htZ-RfftRbJUnZEhj3iX3Kp_QXd36MX4/preview?gid=1199623244#gid=1199623244" target="_blank" rel="noopener noreferrer">Open print settings &nearr;</a></div>
+        <iframe src="https://docs.google.com/spreadsheets/d/1lpBRnUCwfG8htZ-RfftRbJUnZEhj3iX3Kp_QXd36MX4/preview?gid=1199623244&amp;rm=minimal#gid=1199623244" title="Print settings: 3D Printed spreadsheet preview" loading="lazy"></iframe>
+      </details>
+    </section>
 
+    <section class="build-section hardware-container" id="assembly" aria-labelledby="assembly-title">
+      <p class="section-kicker">STEP 03</p>
+      <h2 id="assembly-title">Assemble, wire, and inspect</h2>
+      <div class="build-copy">
+        <p>Follow the illustrated guide below in order. It covers the body, trigger and gears; fingers and ArUco tags; body top and Raspberry Pi; camera, LCD and LiDAR; battery pack; and final connection and inspection.</p>
+        <p>Have M2/M3 drivers, scissors, flush cutters, a multimeter, and a wire stripper ready. Keep carriages on the rail, and keep the battery disconnected while assembling or changing wiring.</p>
+        <p>Use the guide's LCD/button pin map, battery circuit diagram, power-output checks, and final checklist as you work. The printable tag sheet needed for the fingers is directly below the guide.</p>
+      </div>
       <details class="document-preview" id="guide-preview" open>
         <summary>Assembly guide <span>v5 &middot; 27 pages &middot; PDF</span></summary>
         <div class="preview-toolbar"><p>Mechanical assembly, wiring, battery pack, and final checks.</p><a href="https://drive.google.com/file/d/1x5-WaLqtIgZhZTC2jW24R4-Qqvde7_h9/view" target="_blank" rel="noopener noreferrer">Open guide in Drive &nearr;</a></div>
         <iframe src="https://drive.google.com/file/d/1x5-WaLqtIgZhZTC2jW24R4-Qqvde7_h9/preview" title="UMI-Live Hardware Instructions v5 PDF preview" loading="lazy" allowfullscreen></iframe>
       </details>
-      <details class="document-preview" id="parts-preview">
-        <summary>Parts &amp; sourcing <span>Off the Shelf &middot; spreadsheet</span></summary>
-        <div class="preview-toolbar"><p>Supplier links, purchase notes, quantities, and estimated costs.</p><a href="https://docs.google.com/spreadsheets/d/1lpBRnUCwfG8htZ-RfftRbJUnZEhj3iX3Kp_QXd36MX4/preview?gid=0#gid=0" target="_blank" rel="noopener noreferrer">Open parts spreadsheet &nearr;</a></div>
-        <iframe src="https://docs.google.com/spreadsheets/d/1lpBRnUCwfG8htZ-RfftRbJUnZEhj3iX3Kp_QXd36MX4/preview?gid=0&amp;rm=minimal#gid=0" title="Parts list: Off the Shelf spreadsheet preview" loading="lazy"></iframe>
-      </details>
-      <details class="document-preview" id="printing-preview">
-        <summary>Print settings &amp; quantities <span>3D Printed &middot; spreadsheet</span></summary>
-        <div class="preview-toolbar"><p>Read the default settings and each part's overrides. YAM accessories are listed below UMI-Live parts.</p><a href="https://docs.google.com/spreadsheets/d/1lpBRnUCwfG8htZ-RfftRbJUnZEhj3iX3Kp_QXd36MX4/preview?gid=1199623244#gid=1199623244" target="_blank" rel="noopener noreferrer">Open print settings &nearr;</a></div>
-        <iframe src="https://docs.google.com/spreadsheets/d/1lpBRnUCwfG8htZ-RfftRbJUnZEhj3iX3Kp_QXd36MX4/preview?gid=1199623244&amp;rm=minimal#gid=1199623244" title="Print settings: 3D Printed spreadsheet preview" loading="lazy"></iframe>
-      </details>
+      <div class="build-subsection" id="tags">
+        <h3>Print and fit the ArUco tags</h3>
+        <p>Print the original tag PDF at 100% / actual size, with Fit and Shrink disabled. Verify its 50 mm scale check before cutting, preserve the specified white margins, and follow the assembly guide for tag placement and IDs.</p>
       <details class="document-preview" id="tags-preview">
         <summary>Printable ArUco tags <span>IDs 0&ndash;3 &middot; US Letter PDF</span></summary>
         <div class="preview-toolbar"><p>Print the original PDF at 100% / actual size with Fit and Shrink disabled. Verify the 50 mm scale check before cutting.</p><a href="https://drive.google.com/file/d/19DiKg10A1ViMvCTIxdkUXhvksLtead8F/view" target="_blank" rel="noopener noreferrer">Open tag PDF to print &nearr;</a></div>
         <iframe src="https://drive.google.com/file/d/19DiKg10A1ViMvCTIxdkUXhvksLtead8F/preview" title="Printable ArUco tags 0 to 3 PDF preview" loading="lazy" allowfullscreen></iframe>
       </details>
-      <p class="preview-help">If a preview does not load, use its direct link above. Download CAD and printable files from their Drive folders.</p>
+      </div>
+    </section>
+
+    <section class="build-section hardware-container" id="software" aria-labelledby="software-title">
+      <p class="section-kicker">STEP 04</p>
+      <h2 id="software-title">Configure, calibrate, and test</h2>
+      <div class="build-copy">
+        <p>Complete the hardware guide's final inspection and power checks, then continue with the software setup instructions. These cover client and server installation, camera and gripper calibration, service verification, and recording.</p>
+      </div>
+      <div class="build-links">
+        <a href="https://github.com/AfterQuery-Research/umi-live#install">Continue to software setup &nearr;</a>
+      </div>
+    </section>
+
+    <section class="build-section hardware-container" id="yam" aria-labelledby="yam-title">
+      <p class="section-kicker">ROBOT-SIDE HARDWARE</p>
+      <h2 id="yam-title">Build the YAM gripper and camera mount</h2>
+      <div class="build-copy">
+        <p>For an I2RT YAM setup, print the custom robot-side gripper parts and camera mount. The YAM folder supplies the mount and finger holders; the finger backbones and pads come from the shared UMI-Live files.</p>
+        <p>The parts sheet lists the following for one custom YAM gripper:</p>
+        <ul>
+          <li><strong>1 camera mount:</strong> <code>SVPRO_YAM_Mount_v4</code>, from the YAM STL folder.</li>
+          <li><strong>1 left finger holder:</strong> <code>UMI_Flow_YAM-Finger_Holder_Left_v12</code>, from the YAM STL folder.</li>
+          <li><strong>1 right finger holder:</strong> <code>UMI_Flow_YAM-Finger_Holder_Right_v12</code>, from the YAM STL folder.</li>
+          <li><strong>2 finger backbones:</strong> <code>finger_backbone</code>, from the UMI-Live STL folder.</li>
+          <li><strong>2 finger pads:</strong> <code>finger_pad</code>, from the UMI-Live STL folder.</li>
+        </ul>
+        <p>Use the <strong>I2RT YAM Parts</strong> section of the <a href="#printing-preview">3D Printed tab</a> for materials, supports, and per-part slicer overrides. Check its quantities and filament totals separately from the handheld build, and scale the quantities for the number of grippers you are making.</p>
+        <p>The STEP files provide the CAD assemblies for reference. The current draft folder does not yet include a separate YAM assembly guide.</p>
+      </div>
+      <div class="build-links">
+        <a href="https://drive.google.com/drive/folders/16nqxxOQhA5n1YojcbUWS6ieyay3F7Am8" target="_blank" rel="noopener noreferrer">Download YAM STL files &nearr;</a>
+        <a href="https://drive.google.com/drive/folders/1EYAgEG3YlASO0E8-9rsuuEtYtZreYz7t" target="_blank" rel="noopener noreferrer">Open YAM STEP files &nearr;</a>
+        <a href="https://drive.google.com/drive/folders/1aSERmILqNbNlvU1tP3zWQT07wcUmmdxc" target="_blank" rel="noopener noreferrer">Shared backbone &amp; pad files &nearr;</a>
+        <a href="https://docs.google.com/spreadsheets/d/1lpBRnUCwfG8htZ-RfftRbJUnZEhj3iX3Kp_QXd36MX4/preview?gid=1199623244#gid=1199623244" target="_blank" rel="noopener noreferrer">Open YAM print settings &nearr;</a>
+      </div>
     </section>
 
     <section class="hardware-release hardware-container" aria-labelledby="release-title">
