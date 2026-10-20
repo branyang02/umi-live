@@ -201,6 +201,11 @@
   background: var(--wash);
 }
 
+/* Keep the anchored YAM rows in view instead of showing the handheld rows above. */
+.document-preview.yam-preview iframe {
+  height: 420px;
+}
+
 .hardware-release {
   display: grid;
   grid-template-columns: 1fr 1.8fr;

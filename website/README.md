@@ -16,6 +16,8 @@ Keep the guide consistent with the homepage's Bulma base, 960px desktop content 
 
 The page follows the build in order: source parts, print components, assemble and wire, then configure and test. Source documents sit within the corresponding step; the parts list, print settings, and assembly guide are expanded by default. The printable tag sheet is part of assembly, and robot-side YAM accessories are an optional section. Avoid adding a separate card directory that duplicates these sections.
 
+The YAM section embeds the same live `3D Printed` sheet through its sheet-preview endpoint, anchored to row 35 (`#1199623244R34`). Its shorter frame starts with the YAM heading in view; visitors can still scroll within the sheet. The direct-open link selects `A35:F46` in Google Sheets. If the YAM section moves, update both the row anchor and direct-open range and verify the embedded view in a browser.
+
 The guide follows the draft source organization reviewed on 2026-10-20: the parts workbook has `Off the Shelf` and `3D Printed` tabs; the assembly PDF combines mechanical assembly, wiring, power checks, and final inspection; a separate PDF supplies printable ArUco tags; CAD folders separate UMI-Live and I2RT YAM accessories. The YAM finger backbones and pads reuse UMI-Live files. Software setup is a separate repository handoff.
 
 This is a preliminary view test, not a finalized hardware release. It links to the authorized draft Drive files and embeds the v5 assembly PDF, both spreadsheet tabs, and the printable tag PDF. The embedded sources have anyone-with-link reader access; no sharing settings are changed. Direct-open links remain available if a browser blocks a preview. CAD files stay in Drive rather than being duplicated in this repository.
