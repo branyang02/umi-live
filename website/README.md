@@ -22,7 +22,7 @@ The guide follows the draft source organization reviewed on 2026-10-20: the part
 
 This is a preliminary view test, not a finalized hardware release. It links to the authorized draft Drive files and embeds the v5 assembly PDF, both spreadsheet tabs, and the printable tag PDF. The embedded sources have anyone-with-link reader access; no sharing settings are changed. Direct-open links remain available if a browser blocks a preview. CAD files stay in Drive rather than being duplicated in this repository.
 
-When updating resources, edit the corresponding section links and preview URLs in `hardware.html`, plus the displayed version and source-check date. Updates to a Google file with the same ID appear in its live preview; replacing it with a new file ID requires updating this page. Folder links continue to show their current contents. Preserve per-part print overrides and distinguish build quantities from fractions of purchased packs. The folder does not yet include a separate YAM assembly guide, slicer-profile download, or release manifest; do not imply that these exist.
+When updating resources, edit the corresponding section links and preview URLs in `hardware.html`, plus any displayed document version or page count. Updates to a Google file with the same ID appear in its live preview; replacing it with a new file ID requires updating this page. Folder links continue to show their current contents. Preserve per-part print overrides and distinguish build quantities from fractions of purchased packs. The folder does not yet include a separate YAM assembly guide, slicer-profile download, or release manifest; do not imply that these exist.
 
 ## Video assets
 
