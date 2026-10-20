@@ -12,6 +12,8 @@ python3 -m http.server 8765 --directory website
 
 `hardware.html` is the UMI-Live Hardware resource directory, accessed through the homepage's **Hardware setup guide** button and hardware-components section. It shares the site's base styles, with page-specific styles in `static/css/hardware.css`. Native expandable document previews work without JavaScript; `static/js/hardware.js` also opens a preview when its directory link or URL fragment is followed.
 
+Keep the directory consistent with the homepage's Bulma base, 960px desktop content width, Google Sans/Noto Sans typography, shared color variables, and Nerfies template attribution. Keep page-specific CSS and JavaScript separate so changes to the directory do not affect the homepage. The page is plain static HTML and needs no additional build step or dependencies.
+
 The directory follows the draft source organization reviewed on 2026-10-20: the parts workbook has `Off the Shelf` and `3D Printed` tabs; the assembly PDF combines mechanical assembly, wiring, power checks, and final inspection; a separate PDF supplies printable ArUco tags; CAD folders separate UMI-Live and I2RT YAM accessories. The YAM finger backbones and pads reuse UMI-Live files. Software setup is a separate repository handoff.
 
 This is a preliminary view test, not a finalized hardware release. It links to the authorized draft Drive files and embeds the v5 assembly PDF, both spreadsheet tabs, and the printable tag PDF. The embedded sources have anyone-with-link reader access; no sharing settings are changed. Direct-open links remain available if a browser blocks a preview. CAD files stay in Drive rather than being duplicated in this repository.
