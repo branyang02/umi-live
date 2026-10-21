@@ -1,6 +1,8 @@
 const container = document.querySelector("#splat-viewer");
 const status = document.querySelector("#splat-status");
-const sceneUrl = "https://d28zzqy0iyovbz.cloudfront.net/7605a475/v1/scene.compressed.ply";
+// 3D Gaussian splat of a UMI-Live unit, reconstructed from handheld video of the device.
+// Units: device height = 1, +Y up from the table, origin at the centre of its footprint.
+const sceneUrl = "./static/splats/umi-live.ksplat";
 
 if (container && status) {
   try {
@@ -16,40 +18,33 @@ if (container && status) {
       rootElement: container,
       threeScene: scene,
       cameraUp: [0, 1, 0],
-      initialCameraPosition: [1.1437, 0.3535, 0.5286],
-      initialCameraLookAt: [-0.0261, -0.0741, -0.0219],
+      initialCameraPosition: [-1.59, 1.22, -0.76],
+      initialCameraLookAt: [-0.22, 0.48, 0.04],
       useBuiltInControls: true,
       gpuAcceleratedSort: false,
       sharedMemoryForWorkers: false,
+      sphericalHarmonicsDegree: 2,
       sceneRevealMode: GaussianSplats3D.SceneRevealMode.Instant
     });
 
-    const response = await fetch(sceneUrl);
-    if (!response.ok || !response.body) {
-      throw new Error(`Could not load the example scene (${response.status}).`);
+    // The capture never saw the underside, so keep the orbit above the table.
+    const controls = viewer.controls;
+    if (controls) {
+      controls.minPolarAngle = 0.15;
+      controls.maxPolarAngle = Math.PI * 0.53;
+      controls.minDistance = 1.2;
+      controls.maxDistance = 5.0;
     }
 
-    // Fetch transparently decodes the source's HTTP Content-Encoding: gzip.
-    const sceneObjectUrl = URL.createObjectURL(await response.blob());
-
-    try {
-      await viewer.addSplatScene(sceneObjectUrl, {
-        format: GaussianSplats3D.SceneFormat.Ply,
-        showLoadingUI: false
-      });
-      viewer.start();
-      status.remove();
-    } finally {
-      URL.revokeObjectURL(sceneObjectUrl);
-    }
+    await viewer.addSplatScene(sceneUrl, {
+      format: GaussianSplats3D.SceneFormat.KSplat,
+      showLoadingUI: false
+    });
+    viewer.start();
+    status.remove();
   } catch (error) {
     console.error("3D Gaussian splat preview failed to load:", error);
-    const fallback = document.createElement("a");
-    fallback.className = "splat-status splat-status--error";
-    fallback.href = "https://superspl.at/scene/7605a475";
-    fallback.target = "_blank";
-    fallback.rel = "noopener";
-    fallback.textContent = "3D preview unavailable. Open the example scene.";
-    status.replaceWith(fallback);
+    status.classList.add("splat-status--error");
+    status.textContent = "3D preview unavailable in this browser.";
   }
 }
