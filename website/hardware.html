@@ -68,7 +68,7 @@
       <h2 id="files-title">Print the UMI-Live components</h2>
       <div class="build-copy">
         <ol>
-          <li>Download the UMI-Live STL files for printing. Use the STEP assembly when you need to inspect the CAD or adapt a part.</li>
+          <li>Download the UMI-Live STL files for printing. Print orientation is already set in the STL files; keep the supplied orientation. Use the STEP assembly when you need to inspect the CAD or adapt a part.</li>
           <li>Read the default settings at the top of the <strong>3D Printed</strong> tab, then apply each part's material, support, brim, and slicer overrides. Use the listed quantities for your build.</li>
           <li>Print the components and remove and clean all support material before assembly. The assembly guide's illustrated parts list helps identify each printed part.</li>
         </ol>
@@ -93,9 +93,9 @@
         <p>Use the guide's LCD/button pin map, battery circuit diagram, power-output checks, and final checklist as you work. The printable tag sheet needed for the fingers is directly below the guide.</p>
       </div>
       <details class="document-preview" id="guide-preview" open>
-        <summary>Assembly guide <span>v5 &middot; 27 pages &middot; PDF</span></summary>
-        <div class="preview-toolbar"><p>Mechanical assembly, wiring, battery pack, and final checks.</p><a href="https://drive.google.com/file/d/1x5-WaLqtIgZhZTC2jW24R4-Qqvde7_h9/view" target="_blank" rel="noopener noreferrer">Open guide in Drive &nearr;</a></div>
-        <iframe src="https://drive.google.com/file/d/1x5-WaLqtIgZhZTC2jW24R4-Qqvde7_h9/preview" title="UMI-Live Hardware Instructions v5 PDF preview" loading="lazy" allowfullscreen></iframe>
+        <summary>Assembly guide <span>v6 &middot; 27 pages &middot; PDF</span></summary>
+        <div class="preview-toolbar"><p>Mechanical assembly, wiring, battery charging, and final checks.</p><a href="./static/docs/UMI-Live-Hardware-Instructions-v6.pdf" target="_blank" rel="noopener noreferrer">Open assembly guide &nearr;</a></div>
+        <iframe src="./static/docs/UMI-Live-Hardware-Instructions-v6.pdf" title="UMI-Live Hardware Instructions v6 PDF preview" loading="lazy" allowfullscreen></iframe>
       </details>
       <div class="build-subsection" id="tags">
         <h3>Print and fit the ArUco tags</h3>
@@ -105,6 +105,18 @@
         <div class="preview-toolbar"><p>Print the original PDF at 100% / actual size with Fit and Shrink disabled. Verify the 50 mm scale check before cutting.</p><a href="https://drive.google.com/file/d/19DiKg10A1ViMvCTIxdkUXhvksLtead8F/view" target="_blank" rel="noopener noreferrer">Open tag PDF to print &nearr;</a></div>
         <iframe src="https://drive.google.com/file/d/19DiKg10A1ViMvCTIxdkUXhvksLtead8F/preview" title="Printable ArUco tags 0 to 3 PDF preview" loading="lazy" allowfullscreen></iframe>
       </details>
+      </div>
+      <div class="build-subsection" id="charging">
+        <h3>Charge the battery</h3>
+        <p>The battery's two bare-wire leads connect to the WAGO harness, which supplies the converter and accessory barrel output to the Airy. The battery's own barrel socket is for charging.</p>
+        <div class="build-copy">
+          <ol>
+            <li>Switch OFF. Disconnect all connections to the battery, including both bare-wire leads from the WAGO harness.</li>
+            <li>Plug the supplied charger directly into the battery's charging barrel socket.</li>
+            <li>Unplug the charger before reconnecting the battery to the harness.</li>
+          </ol>
+        </div>
+        <p><strong>Do not charge and use the battery at the same time.</strong></p>
       </div>
     </section>
 
