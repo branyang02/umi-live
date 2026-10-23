@@ -27,7 +27,6 @@
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
-          <p class="publication-kicker">A ROBOT-FREE DATA COLLECTION SYSTEM</p>
           <h1 class="title is-1 publication-title">UMI-Live for In-The-Wild Bimanual Robotics Data Collection</h1>
           <div class="is-size-5 publication-authors">
             <span class="author-block"><strong>Govind Velamoor</strong><sup>1,*</sup>,</span>
@@ -132,15 +131,15 @@
       </div>
       <div class="demo-grid demo-grid--human">
         <article class="video-card">
-          <video controls playsinline preload="none" poster="./static/images/grasp-poster.jpg"><source src="./static/videos/precision-grasping-normal-speed.mp4" type="video/mp4"></video>
+          <video controls muted playsinline preload="none" poster="./static/images/grasp-poster.jpg"><source src="./static/videos/precision-grasping-normal-speed.mp4?v=silent" type="video/mp4"></video>
           <div class="video-caption"><h4>Small-object handling</h4><p>Close-up demonstration of precise grasping.</p></div>
         </article>
         <article class="video-card">
-          <video controls playsinline preload="none" poster="./static/images/match-poster.jpg"><source src="./static/videos/match-lighting-from-12s.mp4" type="video/mp4"></video>
+          <video controls muted playsinline preload="none" poster="./static/images/match-poster.jpg"><source src="./static/videos/match-lighting-from-12s.mp4?v=silent" type="video/mp4"></video>
           <div class="video-caption"><h4>Match lighting</h4><p>Bimanual match-lighting demonstration with the handheld UMI devices.</p></div>
         </article>
         <article class="video-card">
-          <video controls playsinline preload="none" poster="./static/images/shirt-poster.jpg"><source src="./static/videos/shirt-folding-timelapse.mp4" type="video/mp4"></video>
+          <video controls muted playsinline preload="none" poster="./static/images/shirt-poster.jpg"><source src="./static/videos/shirt-folding-timelapse.mp4" type="video/mp4"></video>
           <div class="video-caption"><h4>Shirt folding</h4><p>Long-horizon bimanual collection, shown as a time-lapse.</p></div>
         </article>
       </div>
@@ -153,13 +152,13 @@
       </div>
       <div class="episode-grid">
         <article class="video-card video-card--episode">
-          <video controls playsinline preload="none" poster="./static/images/teaser-fruit-poster.jpg">
+          <video controls muted playsinline preload="none" poster="./static/images/teaser-fruit-poster.jpg">
             <source src="./static/videos/fruit-episode.mp4" type="video/mp4">
           </video>
           <div class="video-caption"><h4>Fruit handling</h4><p>A fruit-task recording, shown alongside its wrist-camera views and reconstructed gripper motion.</p></div>
         </article>
         <article class="video-card video-card--episode">
-          <video controls playsinline preload="none" poster="./static/images/bottle-poster.jpg">
+          <video controls muted playsinline preload="none" poster="./static/images/bottle-poster.jpg">
             <source src="./static/videos/bottle-episode.mp4" type="video/mp4">
           </video>
           <div class="video-caption"><h4>Bottle handling</h4><p>A second task example with the recorded camera views and reconstructed gripper motion shown together.</p></div>
@@ -167,11 +166,17 @@
       </div>
       <div class="dataset-explorer">
         <div class="dataset-explorer-heading">
-          <div><h3>Explore a LeRobot episode</h3></div>
-          <a href="https://huggingface.co/spaces/lerobot/visualize_dataset?path=%2Fbrandonyang%2Fumi-live-dataset%2Fepisode_0%3Ft%3D4" target="_blank" rel="noopener">Open full viewer ↗</a>
+          <div>
+            <h3>Explore a LeRobot episode</h3>
+            <p id="dataset-viewer-help" hidden>Page scrolling is on. Enable interaction to explore the episode here.</p>
+          </div>
+          <div class="dataset-explorer-actions">
+            <button class="button is-small is-rounded" id="dataset-viewer-toggle" type="button" aria-controls="dataset-viewer" aria-pressed="false" hidden>Interact with viewer</button>
+            <a href="https://huggingface.co/spaces/lerobot/visualize_dataset?path=%2Fbrandonyang%2Fumi-live-dataset%2Fepisode_0%3Ft%3D4" target="_blank" rel="noopener">Open full viewer ↗</a>
+          </div>
         </div>
         <div class="dataset-embed">
-          <iframe src="https://lerobot-visualize-dataset.hf.space/?path=%2Fbrandonyang%2Fumi-live-dataset%2Fepisode_0%3Ft%3D4" title="LeRobot dataset visualizer: UMI-Live episode 0 at t=4" loading="lazy" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+          <iframe id="dataset-viewer" src="https://lerobot-visualize-dataset.hf.space/?path=%2Fbrandonyang%2Fumi-live-dataset%2Fepisode_0%3Ft%3D4" title="LeRobot dataset visualizer: UMI-Live episode 0 at t=4" loading="lazy" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
         </div>
       </div>
     </div>
@@ -182,23 +187,19 @@
     <div class="demo-group">
       <div class="demo-group-heading">
         <span class="group-index">03</span>
-        <div><h3>Policy training and evaluation</h3><p>π0.5 + RTC uses local inference; all other policy rollouts shown here use remote inference.</p></div>
+        <div><h3>Policy training and evaluation</h3><p>All policy rollouts shown here use remote inference.</p></div>
       </div>
       <div class="demo-grid demo-grid--two">
         <article class="video-card">
-          <video controls playsinline preload="none" poster="./static/images/orange-autonomous-img9527-poster.jpg"><source src="./static/videos/orange-autonomous-img9527.mp4" type="video/mp4"></video>
-          <div class="video-caption"><h4>π0.5 + RTC × UMI-Live</h4><p>Local inference. Autonomous rollout; all six oranges finish in the bowl.</p></div>
-        </article>
-        <article class="video-card">
-          <video controls playsinline preload="none" poster="./static/images/orange-wrist-cams-only-poster.jpg"><source src="./static/videos/orange-wrist-cams-only.mp4" type="video/mp4"></video>
+          <video controls muted playsinline preload="none" poster="./static/images/orange-wrist-cams-only-poster.jpg"><source src="./static/videos/orange-wrist-cams-only.mp4" type="video/mp4"></video>
           <div class="video-caption"><h4>MolmoAct × UMI-Live</h4><p>Wrist-camera-only rollout; one orange remains on the table.</p></div>
         </article>
         <article class="video-card">
-          <video controls playsinline preload="none" poster="./static/images/orange-pi05-no-top-poster.jpg"><source src="./static/videos/orange-pi05-no-top-trimmed.mp4" type="video/mp4"></video>
+          <video controls muted playsinline preload="none" poster="./static/images/orange-pi05-no-top-poster.jpg"><source src="./static/videos/orange-pi05-no-top-trimmed.mp4" type="video/mp4"></video>
           <div class="video-caption"><h4>π0.5 × UMI-Live</h4><p>Rollout without the top camera; an operator adjustment is visible.</p></div>
         </article>
         <article class="video-card">
-          <video controls playsinline preload="none" poster="./static/images/orange-eval-img8534-poster.jpg"><source src="./static/videos/orange-eval-img8534-trimmed.mp4" type="video/mp4"></video>
+          <video controls muted playsinline preload="none" poster="./static/images/orange-eval-img8534-poster.jpg"><source src="./static/videos/orange-eval-img8534-trimmed.mp4" type="video/mp4"></video>
           <div class="video-caption"><h4>MolmoAct × UMI-Live</h4><p>Operator interaction is visible; the run ends before all oranges are placed.</p></div>
         </article>
       </div>
@@ -217,11 +218,11 @@
       </div>
       <div class="demo-grid demo-grid--two">
         <article class="video-card">
-          <video controls playsinline preload="none" poster="./static/images/orange-teleop-poster.jpg"><source src="./static/videos/orange-teleop.mp4" type="video/mp4"></video>
+          <video controls muted playsinline preload="none" poster="./static/images/orange-teleop-poster.jpg?v=blurred"><source src="./static/videos/orange-teleop.mp4?v=blurred" type="video/mp4"></video>
           <div class="video-caption"><h4>Teleoperated orange task</h4><p>The corresponding dual-arm YAM task, controlled from the handheld setup.</p></div>
         </article>
         <article class="video-card">
-          <video controls playsinline preload="none" poster="./static/images/robot-match-poster.jpg"><source src="./static/videos/robot-match-action.mp4" type="video/mp4"></video>
+          <video controls muted playsinline preload="none" poster="./static/images/robot-match-poster.jpg"><source src="./static/videos/robot-match-action.mp4" type="video/mp4"></video>
           <div class="video-caption"><h4>Robot match-lighting task</h4><p>The dual YAM arms approach, grasp, and move the matchbox using the teleoperation setup above.</p></div>
         </article>
       </div>
@@ -250,5 +251,6 @@
 </footer>
 
 <script type="module" src="./static/js/splat-viewer.js"></script>
+<script defer src="./static/js/dataset-viewer.js"></script>
 </body>
 </html>
