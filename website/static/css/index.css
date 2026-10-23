@@ -175,7 +175,23 @@ body {
 }
 
 .demo-group-heading {
+  display: flex;
+  align-items: center;
+  gap: .8rem;
   margin-bottom: 1rem;
+}
+
+.group-index {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  flex: 0 0 2rem;
+  border: 1px solid #b9d6d3;
+  border-radius: 50%;
+  color: var(--teal);
+  font-size: .72rem;
+  font-weight: 700;
 }
 
 .demo-group-heading h3,

@@ -40,7 +40,7 @@ The other clips are derived from videos in `~/Desktop/umi assets/` and encoded a
 - `orange-wrist-cams-only.mp4`: the full `IMG_1684.MOV` camera-ablation clip at normal speed.
 - `orange-pi05-no-top.mp4`: the full `IMG_1686.MOV` π0.5 camera-ablation clip at normal speed.
 - `orange-eval-img8534.mp4`: the new frontal orange-placement trial at normal speed. An operator enters the workspace and the clip ends before all oranges are placed.
-- `orange-teleop.mp4`: operator-driven YAM-arm control, shown in its own Teleoperation setup section. The operator's face is blurred throughout the clip, and the poster is generated from the blurred video.
+- `orange-teleop.mp4`: operator-driven YAM-arm control, shown in its own Teleoperation setup section. The operator's face and the face of the person seated in the background are blurred throughout the clip, and the poster is generated from the blurred video.
 - `robot-match-action.mp4`: YAM-arm match-lighting task, shown in Teleoperation setup alongside the orange teleoperation clip.
 
 The shirt-folding, match-lighting, and precision-grasping source files carry a
