@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="./static/css/bulma.min.css">
   <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-  <link rel="stylesheet" href="./static/css/index.css?v=20261023-layout">
+  <link rel="stylesheet" href="./static/css/index.css?v=20261023-layout2">
   <link rel="icon" type="image/png" href="./static/images/umi-logo.png">
 
   <script type="importmap">
@@ -106,7 +106,7 @@
       <div class="demo-group-heading">
         <h3>Human demonstrations</h3>
       </div>
-      <div class="media-grid">
+      <div class="media-grid media-grid--three">
         <article class="video-card">
           <video controls muted playsinline preload="none" poster="./static/images/grasp-poster.jpg"><source src="./static/videos/precision-grasping-normal-speed.mp4?v=silent" type="video/mp4"></video>
           <div class="video-caption"><h4>Small-object handling</h4></div>
@@ -126,7 +126,7 @@
       <div class="demo-group-heading">
         <h3>Recorded demonstrations</h3>
       </div>
-      <div class="media-grid">
+      <div class="media-grid media-grid--episodes">
         <article class="video-card">
           <video controls muted playsinline preload="none" poster="./static/images/teaser-fruit-poster.jpg">
             <source src="./static/videos/fruit-episode.mp4" type="video/mp4">
@@ -146,8 +146,7 @@
           <a href="https://huggingface.co/spaces/lerobot/visualize_dataset?path=%2Fbrandonyang%2Fumi-live-dataset%2Fepisode_0%3Ft%3D4" target="_blank" rel="noopener noreferrer">Open viewer ↗</a>
         </div>
         <div class="dataset-embed">
-          <iframe id="dataset-viewer" src="https://lerobot-visualize-dataset.hf.space/?path=%2Fbrandonyang%2Fumi-live-dataset%2Fepisode_0%3Ft%3D4" title="LeRobot dataset preview" loading="lazy" inert tabindex="-1" aria-hidden="true" referrerpolicy="strict-origin-when-cross-origin"></iframe>
-          <a class="dataset-preview-link" href="https://huggingface.co/spaces/lerobot/visualize_dataset?path=%2Fbrandonyang%2Fumi-live-dataset%2Fepisode_0%3Ft%3D4" target="_blank" rel="noopener noreferrer" aria-label="Explore the LeRobot episode in Hugging Face (opens in a new tab)"></a>
+          <iframe id="dataset-viewer" src="https://lerobot-visualize-dataset.hf.space/?path=%2Fbrandonyang%2Fumi-live-dataset%2Fepisode_0%3Ft%3D4" title="LeRobot dataset visualizer: UMI-Live episode 0" loading="lazy" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
         </div>
       </div>
     </div>
@@ -162,7 +161,7 @@
       <div class="demo-group-heading">
         <h3>Policy training and evaluation</h3>
       </div>
-      <div class="media-grid">
+      <div class="media-grid media-grid--three">
         <article class="video-card">
           <video controls muted playsinline preload="none" poster="./static/images/orange-wrist-cams-only-poster.jpg"><source src="./static/videos/orange-wrist-cams-only.mp4" type="video/mp4"></video>
           <div class="video-caption"><h4>MolmoAct × UMI-Live</h4></div>

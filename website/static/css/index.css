@@ -187,12 +187,20 @@ body {
   letter-spacing: -.02em;
 }
 
-/* Every video group follows the same two-column, left-to-right grid. */
+/* Shared spacing, with full-width recordings and three-across demo groups. */
 .media-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   align-items: start;
   gap: var(--card-gap);
+}
+
+.media-grid--three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.media-grid--episodes {
+  grid-template-columns: 1fr;
 }
 
 .video-card {
@@ -239,22 +247,6 @@ body {
   width: 100%;
   height: min(50vh, 400px);
   border: 0;
-  pointer-events: none;
-}
-
-/* The preview is one ordinary link; scrolling always belongs to the page. */
-.dataset-preview-link {
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-}
-
-.dataset-preview-link:hover {
-  box-shadow: inset 0 0 0 2px var(--teal);
-}
-
-.project-page .dataset-preview-link:focus-visible {
-  outline-offset: -3px;
 }
 
 .splat-viewer {
@@ -316,7 +308,8 @@ body {
 }
 
 @media screen and (max-width: 768px) {
-  .media-grid {
+  .media-grid,
+  .media-grid--three {
     grid-template-columns: 1fr;
   }
 }
