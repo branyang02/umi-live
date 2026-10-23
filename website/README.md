@@ -50,7 +50,7 @@ with the display-rotation tag cleared to prevent browser-dependent rotation.
 
 `IMG_1767.MOV` is an additional shirt-folding clip that is not included because the page already has the longer shirt-folding session as a time-lapse. The one-button capture-to-saved-dataset recording placeholder was removed because there is no clip showing that sequence clearly.
 
-All shipped video assets have no audio tracks. The HTML players also default to muted. The π0.5 + RTC rollout and its poster have been removed. When replacing clips, strip audio from the files themselves and preserve the teleoperation face blur in both the video and its poster.
+All shipped video assets have no audio tracks. All HTML players autoplay muted and inline. Demonstration clips retain playback controls, and the opening animation still stops on its final frame. The π0.5 + RTC rollout and its poster have been removed. When replacing clips, strip audio from the files themselves and preserve the teleoperation face blur in both the video and its poster.
 
 ## Interactive viewers
 
