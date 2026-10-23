@@ -28,7 +28,7 @@ When updating resources, edit the corresponding section links and preview URLs i
 
 ## Video assets
 
-The opening teaser is an approximately 16-second, step-by-step animation of Figure 1 from the camera-ready Overleaf project `6acd3f78f81551cc5346d095` (source commit `8bf87321f65175207f96d9879669f2c3147ff0d2`). It is rebuilt from the figure's actual image assets plus editable labels, cards, and arrows; it is not cut from a PDF screenshot. It reveals the six existing panels in order, holds each step for about 2.4 seconds, and finishes on the complete figure. The robot evaluation image is illustrative; the linked orange-placement video is a π0.5 rollout, not a MolmoAct2 rollout. Source asset paths and processing notes are in `static/images/teaser-components/SOURCES.md`; the paper checkout is not modified.
+The opening figure displays the complete static `static/images/teaser-poster.jpg`, with all six workflow panels visible immediately. It comes from Figure 1 in the camera-ready Overleaf project `6acd3f78f81551cc5346d095` (source commit `8bf87321f65175207f96d9879669f2c3147ff0d2`). The image is built from the figure's source assets, labels, cards, and arrows. The older animated MP4 and build script remain available as source material but are not loaded by the homepage. The robot evaluation image is illustrative. Source asset paths and processing notes are in `static/images/teaser-components/SOURCES.md`.
 
 The other clips are derived from videos in `~/Desktop/umi assets/` and encoded as MP4 for the page:
 
@@ -40,7 +40,7 @@ The other clips are derived from videos in `~/Desktop/umi assets/` and encoded a
 - `orange-wrist-cams-only.mp4`: the full `IMG_1684.MOV` camera-ablation clip at normal speed.
 - `orange-pi05-no-top.mp4`: the full `IMG_1686.MOV` π0.5 camera-ablation clip at normal speed.
 - `orange-eval-img8534.mp4`: the new frontal orange-placement trial at normal speed. An operator enters the workspace and the clip ends before all oranges are placed.
-- `orange-teleop.mp4`: operator-driven YAM-arm control, shown in its own Teleoperation setup section.
+- `orange-teleop.mp4`: operator-driven YAM-arm control, shown in its own Teleoperation setup section. The operator's face and the face of the person seated in the background are blurred throughout the clip, and the poster is generated from the blurred video.
 - `robot-match-action.mp4`: YAM-arm match-lighting task, shown in Teleoperation setup alongside the orange teleoperation clip.
 
 The shirt-folding, match-lighting, and precision-grasping source files carry a
@@ -50,6 +50,13 @@ with the display-rotation tag cleared to prevent browser-dependent rotation.
 
 `IMG_1767.MOV` is an additional shirt-folding clip that is not included because the page already has the longer shirt-folding session as a time-lapse. The one-button capture-to-saved-dataset recording placeholder was removed because there is no clip showing that sequence clearly.
 
+All shipped video assets have no audio tracks. The HTML players also default to muted. The π0.5 + RTC rollout and its poster have been removed. When replacing clips, strip audio from the files themselves and preserve the teleoperation face blur in both the video and its poster.
+
 ## Interactive viewers
 
-The hardware-components section reproduces the paper's exploded CAD view from `overleaf-paper/figures/cad_modules.pdf` as a 300 dpi PNG. The LeRobot dataset visualizer is embedded across the page width and links to its full Hugging Face Space. The 3D Gaussian Splat section uses `@mkkellogg/gaussian-splats-3d` 0.4.7 in a small, white canvas viewer rather than a SuperSplat iframe. It loads `static/splats/umi-live.ksplat`, a device-only splat of one UMI-Live unit reconstructed from three handheld phone videos (COLMAP cameras, SAM 2 device masks, gsplat training on random backgrounds with refined camera poses and a learned per-frame blur that absorbs hand-motion blur, antialiased rasterization). The asset is in the viewer's own `.ksplat` format: +Y is up, the device is one unit tall and stands at the origin. The viewer renders it with `antialiased: true` to match training, and the orbit stays within the angles the videos covered well: above the table and away from the cable side of the unit.
+The hardware-components section reproduces the paper's exploded CAD view from `overleaf-paper/figures/cad_modules.pdf` as a 300 dpi PNG. The LeRobot dataset visualizer is directly interactive in its compact frame, using the shared content width and capped at 400px tall (320px on mobile). Clicking and scrolling inside the iframe work normally, and the **Open viewer** link remains available for a full-page view. No overlay or interaction toggle is used. The 3D Gaussian Splat section uses `@mkkellogg/gaussian-splats-3d` 0.4.7 in a small, white canvas viewer rather than a SuperSplat iframe. It loads `static/splats/umi-live.ksplat`, a device-only splat of one UMI-Live unit reconstructed from three handheld phone videos (COLMAP cameras, SAM 2 device masks, gsplat training on random backgrounds with refined camera poses and a learned per-frame blur that absorbs hand-motion blur, antialiased rasterization). The asset is in the viewer's own `.ksplat` format: +Y is up, the device is one unit tall and stands at the origin. The viewer renders it with `antialiased: true` to match training, and the orbit stays within the angles the videos covered well: above the table and away from the cable side of the unit.
+
+
+## Layout standard
+
+The homepage and hardware guide share `--content-width: 960px` and `--page-gutter` in `static/css/index.css`. Every homepage section, figure, and viewer uses the same content edges. All video groups use `.media-grid` with a 1rem gap. Recorded demonstrations use `.media-grid--episodes` to stack the panoramic clips at full content width. Groups of three videos use `.media-grid--three` to place all three in one desktop row; two-video groups use two columns. All groups stack into one column at 768px. Videos retain their original aspect ratios so synchronized camera views are not cropped. Section spacing uses `--section-space`. Keep card titles and substantive content; omit descriptive sub-captions and duplicate figure captions.

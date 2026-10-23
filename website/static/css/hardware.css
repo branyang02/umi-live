@@ -2,11 +2,6 @@
   background: #fff;
 }
 
-.hardware-container {
-  width: min(960px, calc(100% - 3rem));
-  margin-inline: auto;
-}
-
 .hardware-page a {
   color: #187879;
 }
@@ -89,13 +84,6 @@
   width: 100%;
   height: 320px;
   object-fit: contain;
-}
-
-.hardware-overview figcaption {
-  margin-top: .65rem;
-  color: var(--muted);
-  font-size: .72rem;
-  text-align: center;
 }
 
 .hardware-page h2 {
