@@ -4,7 +4,7 @@
   --teal: #278c8d;
   --line: #dce6e4;
   --wash: #f5f8f7;
-  --content-width: 960px;
+  --content-width: 900px;
   --page-gutter: 1.5rem;
   --section-space: 2.5rem;
   --card-gap: 1rem;
@@ -110,7 +110,7 @@ body {
   margin-bottom: var(--section-space);
 }
 
-.teaser img,
+.teaser video,
 .exploded-figure img {
   display: block;
   width: 100%;
