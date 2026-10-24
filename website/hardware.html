@@ -26,7 +26,7 @@
       <div>
         <p class="section-kicker">HARDWARE REPRODUCTION GUIDE</p>
         <h1 id="page-title">UMI-Live Hardware</h1>
-        <p class="hardware-lead">Build the UMI-Live hardware from parts to a working unit. Follow the steps below for sourcing, 3D printing, assembly, wiring, and setup.</p>
+        <p class="hardware-lead">Source the parts, print the components, and follow the guide to assemble and set up your UMI-Live.</p>
         <div class="build-links">
           <a href="#parts">Start the build <span aria-hidden="true">&darr;</span></a>
           <a href="https://drive.google.com/drive/folders/1TpTJQBPQSI797XXm9xJsUElVNWArdHAx" target="_blank" rel="noopener noreferrer">All files on Google Drive <span aria-hidden="true">&nearr;</span></a>
@@ -53,8 +53,8 @@
       <p class="section-kicker">STEP 01</p>
       <h2 id="parts-title">Source the parts</h2>
       <div class="build-copy">
-        <p>The hardware guide builds <strong>one handheld UMI-Live unit</strong>. For a bimanual setup, plan for two units. Use the <strong>Off the Shelf</strong> tab below to source the electronics, power components, wiring, mechanical parts, fasteners, and consumables.</p>
-        <p>Follow the supplier links and purchase notes in the sheet. Check pack sizes and optional items before ordering: fractions of purchased packs describe material used, not the number of packs to buy.</p>
+        <p>The guide covers <strong>one handheld unit</strong>; build two for bimanual use. Order parts from the <strong>Off the Shelf</strong> tab below.</p>
+        <p>Check pack sizes and purchase notes before ordering. Fractional quantities show how much of a pack the build uses.</p>
       </div>
       <details class="document-preview" id="parts-preview" open>
         <summary>Parts &amp; sourcing <span>Off the Shelf &middot; spreadsheet</span></summary>
@@ -68,9 +68,9 @@
       <h2 id="files-title">Print the UMI-Live components</h2>
       <div class="build-copy">
         <ol>
-          <li>Download the UMI-Live STL files for printing. Print orientation is already set in the STL files; keep the supplied orientation. Use the STEP assembly when you need to inspect the CAD or adapt a part.</li>
-          <li>Read the default settings at the top of the <strong>3D Printed</strong> tab, then apply each part's material, support, brim, and slicer overrides. Bridging is needed for some parts. Use the listed quantities for your build.</li>
-          <li>Print the components and remove and clean all support material before assembly. The assembly guide's illustrated parts list helps identify each printed part.</li>
+          <li>Download the STL files and keep their supplied print orientation. Use the STEP assembly to inspect or modify parts.</li>
+          <li>Use the defaults in the <strong>3D Printed</strong> tab, including a 0.4 mm nozzle, and follow each part's material, support, brim, and slicer settings. Some parts require bridging.</li>
+          <li>Print the listed quantities and remove all supports. Use the illustrated parts list in the assembly guide to identify each part.</li>
         </ol>
       </div>
       <div class="build-links">
@@ -79,7 +79,7 @@
       </div>
       <details class="document-preview" id="printing-preview" open>
         <summary>Print settings &amp; quantities <span>3D Printed &middot; spreadsheet</span></summary>
-        <div class="preview-toolbar"><p>Read the default settings and each part's overrides. YAM accessories are listed below UMI-Live parts.</p><a href="https://docs.google.com/spreadsheets/d/1lpBRnUCwfG8htZ-RfftRbJUnZEhj3iX3Kp_QXd36MX4/preview?gid=1199623244#gid=1199623244" target="_blank" rel="noopener noreferrer">Open print settings &nearr;</a></div>
+        <div class="preview-toolbar"><p>UMI-Live parts are listed first, followed by YAM accessories.</p><a href="https://docs.google.com/spreadsheets/d/1lpBRnUCwfG8htZ-RfftRbJUnZEhj3iX3Kp_QXd36MX4/preview?gid=1199623244#gid=1199623244" target="_blank" rel="noopener noreferrer">Open print settings &nearr;</a></div>
         <iframe src="https://docs.google.com/spreadsheets/d/1lpBRnUCwfG8htZ-RfftRbJUnZEhj3iX3Kp_QXd36MX4/preview?gid=1199623244&amp;rm=minimal#gid=1199623244" title="Print settings: 3D Printed spreadsheet preview" loading="lazy"></iframe>
       </details>
     </section>
@@ -88,27 +88,26 @@
       <p class="section-kicker">STEP 03</p>
       <h2 id="assembly-title">Assemble, wire, and inspect</h2>
       <div class="build-copy">
-        <p>Follow the illustrated guide below in order. It covers the body, trigger and gears; fingers and ArUco tags; body top and Raspberry Pi; camera, LCD and LiDAR; battery pack; and final connection and inspection.</p>
-        <p>Have M2/M3 drivers, scissors, flush cutters, a multimeter, and a wire stripper ready. Keep carriages on the rail, and keep the battery disconnected while assembling or changing wiring.</p>
-        <p>Use the guide's LCD/button pin map, battery circuit diagram, power-output checks, and final checklist as you work. The printable tag sheet needed for the fingers is directly below the guide.</p>
+        <p>Follow the assembly guide in order, including its wiring diagrams, power checks, and final checklist.</p>
+        <p>You will need M2/M3 drivers, scissors, flush cutters, a multimeter, and a wire stripper. Keep the carriages on the rail and disconnect the battery before assembly or wiring changes.</p>
       </div>
       <details class="document-preview" id="guide-preview" open>
         <summary>Assembly guide <span>v6 &middot; 27 pages &middot; PDF</span></summary>
-        <div class="preview-toolbar"><p>Mechanical assembly, wiring, battery charging, and final checks.</p><a href="./static/docs/UMI-Live-Hardware-Instructions-v6.pdf" target="_blank" rel="noopener noreferrer">Open assembly guide &nearr;</a></div>
-        <iframe src="./static/docs/UMI-Live-Hardware-Instructions-v6.pdf" title="UMI-Live Hardware Instructions v6 PDF preview" loading="lazy" allowfullscreen></iframe>
+        <div class="preview-toolbar"><p>Mechanical assembly, wiring, battery charging, and final checks.</p><a href="./static/docs/UMI-Live-Hardware-Instructions-v6.pdf?v=20261024" target="_blank" rel="noopener noreferrer">Open assembly guide &nearr;</a></div>
+        <iframe src="./static/docs/UMI-Live-Hardware-Instructions-v6.pdf?v=20261024" title="UMI-Live Hardware Instructions v6 PDF preview" loading="lazy" allowfullscreen></iframe>
       </details>
       <div class="build-subsection" id="tags">
         <h3>Print and fit the ArUco tags</h3>
-        <p>Print the original tag PDF at 100% / actual size, with Fit and Shrink disabled. Verify its 50 mm scale check before cutting, preserve the specified white margins, and follow the assembly guide for tag placement and IDs.</p>
+        <p>Print the tag PDF at <strong>100% / actual size</strong>, with Fit and Shrink disabled. Check the 50 mm scale before cutting and keep the white margins. Follow the assembly guide for placement and IDs.</p>
       <details class="document-preview" id="tags-preview">
         <summary>Printable ArUco tags <span>IDs 0&ndash;3 &middot; US Letter PDF</span></summary>
-        <div class="preview-toolbar"><p>Print the original PDF at 100% / actual size with Fit and Shrink disabled. Verify the 50 mm scale check before cutting.</p><a href="https://drive.google.com/file/d/19DiKg10A1ViMvCTIxdkUXhvksLtead8F/view" target="_blank" rel="noopener noreferrer">Open tag PDF to print &nearr;</a></div>
+        <div class="preview-toolbar"><p>16 mm markers with 2 mm white margins.</p><a href="https://drive.google.com/file/d/19DiKg10A1ViMvCTIxdkUXhvksLtead8F/view" target="_blank" rel="noopener noreferrer">Open tag PDF to print &nearr;</a></div>
         <iframe src="https://drive.google.com/file/d/19DiKg10A1ViMvCTIxdkUXhvksLtead8F/preview" title="Printable ArUco tags 0 to 3 PDF preview" loading="lazy" allowfullscreen></iframe>
       </details>
       </div>
       <div class="build-subsection" id="charging">
         <h3>Charge the battery</h3>
-        <p>The battery's two bare-wire leads connect to the WAGO harness, which supplies the converter and accessory barrel output to the Airy. The battery's own barrel socket is for charging.</p>
+        <p>The battery's two bare-wire leads power the WAGO harness. Its barrel socket is for the supplied charger; the harness's separate barrel output powers the Airy.</p>
         <div class="build-copy">
           <ol>
             <li>Switch OFF. Disconnect all connections to the battery, including both bare-wire leads from the WAGO harness.</li>
@@ -124,7 +123,7 @@
       <p class="section-kicker">STEP 04</p>
       <h2 id="software-title">Configure, calibrate, and test</h2>
       <div class="build-copy">
-        <p>Complete the hardware guide's final inspection and power checks, then continue with the software setup instructions. These cover client and server installation, camera and gripper calibration, service verification, and recording.</p>
+        <p>After the final inspection and power checks, follow the software guide to install the software, calibrate the camera and gripper, and test recording.</p>
       </div>
       <div class="build-links">
         <a href="https://github.com/AfterQuery-Research/umi-live#install">Continue to software setup &nearr;</a>
@@ -135,16 +134,8 @@
       <p class="section-kicker">ROBOT-SIDE HARDWARE</p>
       <h2 id="yam-title">Build the YAM gripper and camera mount</h2>
       <div class="build-copy">
-        <p>For an I2RT YAM setup, print the custom robot-side gripper parts and camera mount. The YAM folder supplies the mount and finger holders; the finger backbones and pads come from the shared UMI-Live files.</p>
-        <p>The parts sheet lists the following for one custom YAM gripper:</p>
-        <ul>
-          <li><strong>1 camera mount:</strong> <code>SVPRO_YAM_Mount_v4</code>, from the YAM STL folder.</li>
-          <li><strong>1 left finger holder:</strong> <code>UMI_Flow_YAM-Finger_Holder_Left_v12</code>, from the YAM STL folder.</li>
-          <li><strong>1 right finger holder:</strong> <code>UMI_Flow_YAM-Finger_Holder_Right_v12</code>, from the YAM STL folder.</li>
-          <li><strong>2 finger backbones:</strong> <code>finger_backbone</code>, from the UMI-Live STL folder.</li>
-          <li><strong>2 finger pads:</strong> <code>finger_pad</code>, from the UMI-Live STL folder.</li>
-        </ul>
-        <p>The <a href="#yam-preview">embedded print settings below</a> show the <strong>I2RT YAM Parts</strong> section of the same <strong>3D Printed</strong> sheet. Use its materials, supports, and per-part slicer overrides. Check the YAM quantities and filament totals separately from the handheld build, and scale the quantities for the number of grippers you are making.</p>
+        <p>For each YAM gripper, print one camera mount, one left and one right finger holder, two finger backbones, and two pads.</p>
+        <p>The YAM folder contains the mount and holders. Use the shared UMI-Live files for the backbones and pads. Follow the <strong>I2RT YAM Parts</strong> settings below; its quantities and filament totals are separate from the handheld build.</p>
       </div>
       <div class="build-links">
         <a href="https://drive.google.com/drive/folders/16nqxxOQhA5n1YojcbUWS6ieyay3F7Am8" target="_blank" rel="noopener noreferrer">Download YAM STL files &nearr;</a>
