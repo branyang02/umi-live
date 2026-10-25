@@ -16,7 +16,8 @@ const LABELS = [
   ['fingers', 'Redesigned gripper fingers', 'Fingers'],
   ['battery', 'Removable battery module', 'Battery'],
 ];
-const LABEL_LEAD = 0.012, LABEL_SPAN = 0.07;   // each callout starts just before its part lands and takes this long to draw in
+const LABEL_SPAN = 0.07;                // scroll progress each callout takes to draw in
+const LABEL_WINDOW = [0.14, 0.86];      // callout entrances are spread evenly across this part of the scroll
 
 const ease = (x) => { x = Math.min(Math.max(x, 0), 1); return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
 const clamp01 = (x) => Math.min(Math.max(x, 0), 1);
@@ -102,9 +103,14 @@ export async function mountExplode(host, opts = {}) {
   svg.style.opacity = labelLayer.style.opacity = '1';
   // when each callout's part reaches its final position (last keyframe of its motion)
   for (const c of callouts) c.lands = Math.max(...c.pts.map(p => D.keys[p.g] ? D.keys[p.g][D.keys[p.g].length - 1][0] : 0));
-  const firstLand = callouts.length ? Math.min(...callouts.map(c => c.lands)) : 1;
+  // order callouts by how soon their part lands, then give them evenly spaced entrances;
+  // a label that arrives before its part has landed simply rides along with it
+  [...callouts].sort((a, b) => a.lands - b.lands).forEach((c, i, arr) => {
+    c.start = LABEL_WINDOW[0] + (arr.length > 1 ? i / (arr.length - 1) : 0) * (LABEL_WINDOW[1] - LABEL_WINDOW[0]);
+  });
+  const firstStart = callouts.length ? Math.min(...callouts.map(c => c.start)) : 1;
   // the view eases out to make room for the label columns as the first callouts arrive
-  const labelsIn = (t) => ease(clamp01((t - firstLand + LABEL_LEAD) / 0.14));
+  const labelsIn = (t) => ease(clamp01((t - firstStart) / 0.2));
   const backOut = (x) => { const k = 1.7; x -= 1; return x * x * ((k + 1) * x + k) + 1; };
   let labelRoom = 0, labelPad = 28;   // px each side needs for the widest label plus its leader; model-to-text gap
 
@@ -224,7 +230,7 @@ export async function mountExplode(host, opts = {}) {
       const edge = c.side < 0 ? Math.max(c.w + 8, x0 - pad) : Math.min(W - c.w - 8, x1 + pad);
       const left = c.side < 0 ? edge - c.w : edge;
       // staged entrance: dot pops on the part, the leader draws out to the column, then the text slides in
-      const k = clamp01((t - c.lands + LABEL_LEAD) / LABEL_SPAN);
+      const k = clamp01((t - c.start) / LABEL_SPAN);
       const kDot = clamp01(k / 0.3), kLine = ease(clamp01((k - 0.12) / 0.5)), kText = ease(clamp01((k - 0.45) / 0.55));
       const slide = (1 - kText) * (narrow ? 8 : 16) * c.side;
       c.el.style.transform = `translate(${left + slide}px, ${c.y - c.h / 2}px)`;
@@ -232,13 +238,17 @@ export async function mountExplode(host, opts = {}) {
       c.el.classList.toggle('is-right', c.side > 0);
       const end = edge - c.side * 6;                      // leader stops just short of the text
       const knee = end - c.side * (narrow ? 8 : 18);      // any elbow sits just before the text
-      const d = Math.abs(c.y - c.dy) < 0.5
-        ? `M${c.dx},${c.dy} L${end},${c.y}`
-        : `M${c.dx},${c.dy} L${knee},${c.dy} L${end},${c.y}`;
-      c.path.setAttribute('d', d);
-      const len = c.path.getTotalLength();
-      c.path.style.strokeDasharray = `${len} ${len}`;
-      c.path.style.strokeDashoffset = (len * (1 - kLine)).toFixed(1);
+      // leader polyline, drawn out from the dot by kLine of its length (geometry, not dash styles,
+      // so the browser repaints it cleanly every frame)
+      const pts = Math.abs(c.y - c.dy) < 0.5 ? [[c.dx, c.dy], [end, c.y]] : [[c.dx, c.dy], [knee, c.dy], [end, c.y]];
+      let total = 0; for (let i = 1; i < pts.length; i++) total += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
+      let left2 = total * kLine, d = `M${pts[0][0].toFixed(1)},${pts[0][1].toFixed(1)}`;
+      for (let i = 1; i < pts.length && left2 > 0; i++) {
+        const sl = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]), f = Math.min(1, left2 / (sl || 1));
+        d += ` L${(pts[i - 1][0] + (pts[i][0] - pts[i - 1][0]) * f).toFixed(1)},${(pts[i - 1][1] + (pts[i][1] - pts[i - 1][1]) * f).toFixed(1)}`;
+        left2 -= sl;
+      }
+      c.path.setAttribute('d', kLine > 0 ? d : 'M0,0');
       c.path.style.opacity = kLine > 0 ? '1' : '0';
       c.dot.setAttribute('cx', c.dx); c.dot.setAttribute('cy', c.dy);
       c.dot.setAttribute('r', (c.r * (kDot > 0 ? backOut(kDot) : 0)).toFixed(2));

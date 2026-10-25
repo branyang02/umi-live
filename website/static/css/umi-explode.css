@@ -49,7 +49,6 @@
   fill: none;
   stroke: var(--ux-line);
   stroke-width: 1;
-  vector-effect: non-scaling-stroke;
 }
 
 .umi-explode__dot {
