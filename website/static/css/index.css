@@ -172,7 +172,7 @@ body {
 
 /* Scroll-driven exploded view: a full-width sticky stage inside a slightly taller track. */
 .explode-track {
-  --explode-scroll: 120vh;
+  --explode-scroll: 140vh;
   display: none;
   position: relative;
   height: calc(100vh + var(--explode-scroll));
@@ -254,7 +254,7 @@ body {
 .explode-legend {
   position: absolute;
   right: 1rem;
-  bottom: 2.75rem;
+  bottom: 3.6rem;
   left: 1rem;
   display: none;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -282,6 +282,47 @@ body {
   position: static;
   flex-shrink: 0;
   opacity: 1;
+}
+
+.explode-hint {
+  position: absolute;
+  bottom: 1.1rem;
+  left: 50%;
+  display: grid;
+  justify-items: center;
+  gap: .4rem;
+  color: var(--muted);
+  font-size: .66rem;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%);
+  transition: opacity .3s ease;
+}
+
+.explode-loaded .explode-hint {
+  opacity: .9;
+}
+
+.explode-hint i {
+  position: relative;
+  display: block;
+  width: 7rem;
+  height: 2px;
+  overflow: hidden;
+  background: var(--line);
+}
+
+.explode-hint i::after {
+  position: absolute;
+  inset: 0;
+  background: var(--teal);
+  content: "";
+  transform: scaleX(var(--explode-progress, 0));
+  transform-origin: left;
 }
 
 .explode-skip {
@@ -312,7 +353,7 @@ body {
 .explode-legend {
   position: absolute;
   right: 1rem;
-  bottom: 2.75rem;
+  bottom: 3.6rem;
   left: 1rem;
   display: none;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -513,7 +554,7 @@ body {
   }
 
   .explode-track {
-    --explode-scroll: 80vh;
+    --explode-scroll: 100vh;
   }
 
 }

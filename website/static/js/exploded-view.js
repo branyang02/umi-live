@@ -11,6 +11,7 @@ const track = section && section.querySelector(".explode-track");
 const stage = track && track.querySelector(".explode-stage");
 const canvas = stage && stage.querySelector("canvas");
 const labelLayer = stage && stage.querySelector(".explode-labels");
+const hint = stage && stage.querySelector(".explode-hint span");
 const MODEL_URL = "./static/models/umi-live-cad.glb";
 const LAYOUT_URL = "./static/models/umi-live-explode.json";
 
@@ -78,7 +79,11 @@ async function start() {
     if (!modules[id]) {
       const group = new THREE.Group();
       scene.add(group);
-      modules[id] = { group, info, offset: new THREE.Vector3(...info.offset) };
+      // Each part follows a list of moves, each over its own window of the explode progress;
+      // `offset` is where all of them together leave it.
+      const moves = info.moves.map((m) => ({ offset: new THREE.Vector3(...m.offset), start: m.start, end: m.end }));
+      const offset = moves.reduce((sum, m) => sum.add(m.offset), new THREE.Vector3());
+      modules[id] = { group, info, moves, offset };
     }
     object.material.side = THREE.DoubleSide;
     modules[id].group.add(object.clone());
@@ -140,12 +145,17 @@ async function start() {
     height = stage.clientHeight;
     narrow = width < 640;
     stage.classList.toggle("explode-stage--narrow", narrow);
-    legendHeight = narrow ? legend.offsetHeight + 48 : 0;
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    legendHeight = narrow ? legend.offsetHeight + 64 : 0;
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
     renderer.setSize(width, height, false);
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
     svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+    // label sizes are fixed while scrolling, so measure them here rather than every frame
+    for (const label of labels) {
+      label.w = label.text.offsetWidth;
+      label.h = label.text.offsetHeight;
+    }
   }
 
   function progress() {
@@ -156,15 +166,21 @@ async function start() {
 
   const anchor = new THREE.Vector3();
   const corner = new THREE.Vector3();
-  function render() {
-    const p = progress();
+  function render(p) {
     const e = clamp01((p - HOLD_START) / (1 - HOLD_START - HOLD_END));
 
     for (const m of Object.values(modules)) {
-      const { start: s, end: t } = m.info;
-      m.local = smoother(clamp01((e - s) / Math.max(t - s, 1e-3)));
-      m.group.position.copy(m.offset).multiplyScalar(m.local);
+      m.group.position.set(0, 0, 0);
+      for (const move of m.moves) {
+        move.local = smoother(clamp01((e - move.start) / Math.max(move.end - move.start, 1e-3)));
+        m.group.position.addScaledVector(move.offset, move.local);
+      }
+      // label timing: parts that move show theirs once their last move lands, parts that stay near the end
+      m.local = m.moves.length ? m.moves[m.moves.length - 1].local : e;
     }
+
+    stage.style.setProperty("--explode-progress", e.toFixed(4));
+    if (hint) hint.textContent = e < 0.97 ? "Scroll to take it apart" : "Scroll up to reassemble";
 
     // Camera: a slow quarter turn while the parts separate, pulled back just enough that every part
     // stays inside the frame (less the label columns at the sides).
@@ -223,7 +239,6 @@ async function start() {
     }
     for (const [side, list] of narrow ? [] : Object.entries(sides)) {
       list.sort((a, b) => a.y - b.y);
-      for (const label of list) label.h = label.text.offsetHeight;
       const step = (a, b) => (a.h + b.h) / 2 + gap;  // centre-to-centre distance for two labels
       list.forEach((label, i) => { label.ty = Math.max(label.y, i ? list[i - 1].ty + step(list[i - 1], label) : 24); });
       for (let i = list.length - 1; i >= 0; i--) {  // pull back up if the column ran off the bottom
@@ -232,7 +247,7 @@ async function start() {
       }
       const left = side === "left";
       for (const label of list) {
-        const w = label.text.offsetWidth;
+        const w = label.w;
         const tx = left ? cx - columnGap : cx + columnGap;
         const textX = left ? tx - 8 - w : tx + 8;
         label.text.style.opacity = label.alpha;
@@ -247,15 +262,32 @@ async function start() {
     }
   }
 
-  let queued = false;
+  // The parts glide toward the scroll position instead of jumping with each wheel notch:
+  // the shown progress eases toward the target with a ~0.12 s time constant.
+  let shown = progress();
+  let goal = shown;
+  let running = false;
+  let last = 0;
+  function frame(now) {
+    const dt = Math.min((now - last) / 1000, 0.1);
+    last = now;
+    shown += (goal - shown) * (1 - Math.exp(-dt / 0.12));
+    if (Math.abs(goal - shown) < 2e-4) shown = goal;
+    render(shown);
+    if (shown !== goal) requestAnimationFrame(frame);
+    else running = false;
+  }
   const schedule = () => {
-    if (queued) return;
-    queued = true;
-    requestAnimationFrame(() => { queued = false; render(); });
+    goal = progress();
+    if (running) return;
+    running = true;
+    last = performance.now();
+    requestAnimationFrame(frame);
   };
   window.addEventListener("scroll", schedule, { passive: true });
-  window.addEventListener("resize", () => { resize(); schedule(); });
+  window.addEventListener("resize", () => { resize(); render(shown); });
   resize();
-  render();
+  render(shown);
+  document.fonts?.ready.then(() => { resize(); render(shown); });
   section.classList.add("explode-loaded");
 }
