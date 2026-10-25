@@ -144,6 +144,22 @@
   font-weight: 600;
 }
 
+.preview-toolbar--actions {
+  justify-content: flex-end;
+  padding-block: .65rem;
+}
+
+.preview-toolbar--actions .sheet-zoom {
+  order: -1;
+  margin-right: auto;
+}
+
+.preview-toolbar--actions > a {
+  padding: .35rem .65rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+}
+
 .document-preview iframe {
   display: block;
   width: 100%;

@@ -8,7 +8,7 @@
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
   <link rel="stylesheet" href="./static/css/bulma.min.css">
   <link rel="stylesheet" href="./static/css/index.css?v=20261023-teaser-once">
-  <link rel="stylesheet" href="./static/css/hardware.css?v=20261023-layout">
+  <link rel="stylesheet" href="./static/css/hardware.css?v=20261024-toolbar">
   <link rel="icon" type="image/png" href="./static/images/umi-logo.png">
   <script defer src="./static/js/hardware.js?v=20261020-zoom2"></script>
 </head>
@@ -26,7 +26,7 @@
       <div>
         <p class="section-kicker">HARDWARE REPRODUCTION GUIDE</p>
         <h1 id="page-title">UMI-Live Hardware</h1>
-        <p class="hardware-lead">Source the parts, print the components, and follow the guide to assemble and set up your UMI-Live.</p>
+        <p class="hardware-lead">Source the parts, print the components, and follow the guide to assemble and set up your own UMI-Live.</p>
         <div class="build-links">
           <a href="#parts">Start the build <span aria-hidden="true">&darr;</span></a>
           <a href="https://drive.google.com/drive/folders/1TpTJQBPQSI797XXm9xJsUElVNWArdHAx" target="_blank" rel="noopener noreferrer">All files on Google Drive <span aria-hidden="true">&nearr;</span></a>
@@ -54,11 +54,11 @@
       <h2 id="parts-title">Source the parts</h2>
       <div class="build-copy">
         <p>The guide covers <strong>one handheld unit</strong>; build two for bimanual use. Order parts from the <strong>Off the Shelf</strong> tab below.</p>
-        <p>Check pack sizes and purchase notes before ordering. Fractional quantities show how much of a pack the build uses.</p>
+        <p>Check pack sizes and purchase notes before ordering. Fractional quantities show approximately how much of a pack the build uses.</p>
       </div>
-      <details class="document-preview" id="parts-preview" open>
+      <details class="document-preview" id="parts-preview">
         <summary>Parts &amp; sourcing <span>Off the Shelf &middot; spreadsheet</span></summary>
-        <div class="preview-toolbar"><p>Supplier links, purchase notes, quantities, and estimated costs.</p><a href="https://docs.google.com/spreadsheets/d/1lpBRnUCwfG8htZ-RfftRbJUnZEhj3iX3Kp_QXd36MX4/preview?gid=0#gid=0" target="_blank" rel="noopener noreferrer">Open parts spreadsheet &nearr;</a></div>
+        <div class="preview-toolbar preview-toolbar--actions"><a href="https://docs.google.com/spreadsheets/d/1lpBRnUCwfG8htZ-RfftRbJUnZEhj3iX3Kp_QXd36MX4/preview?gid=0#gid=0" target="_blank" rel="noopener noreferrer">Open parts spreadsheet &nearr;</a></div>
         <iframe src="https://docs.google.com/spreadsheets/d/1lpBRnUCwfG8htZ-RfftRbJUnZEhj3iX3Kp_QXd36MX4/preview?gid=0&amp;rm=minimal#gid=0" title="Parts list: Off the Shelf spreadsheet preview" loading="lazy"></iframe>
       </details>
     </section>
@@ -69,7 +69,7 @@
       <div class="build-copy">
         <ol>
           <li>Download the STL files and keep their supplied print orientation. Use the STEP assembly to inspect or modify parts.</li>
-          <li>Use the defaults in the <strong>3D Printed</strong> tab, including a 0.4 mm nozzle, and follow each part's material, support, brim, and slicer settings. Some parts require bridging.</li>
+          <li>Use the defaults in the <strong>3D Printed</strong> tab, which are based on the Bambu Studio P1S/P2S <strong>0.20 mm Standard</strong> settings. Follow each part's material, support, brim, and slicer settings. Some parts require bridging.</li>
           <li>Print the listed quantities and remove all supports. Use the illustrated parts list in the assembly guide to identify each part.</li>
         </ol>
       </div>
@@ -77,9 +77,9 @@
         <a href="https://drive.google.com/drive/folders/1aSERmILqNbNlvU1tP3zWQT07wcUmmdxc" target="_blank" rel="noopener noreferrer">Download UMI-Live STL files &nearr;</a>
         <a href="https://drive.google.com/drive/folders/1J5adTWDS-Il32CPbCDhqkBn5mkC3Nm9l" target="_blank" rel="noopener noreferrer">Open STEP assembly &nearr;</a>
       </div>
-      <details class="document-preview" id="printing-preview" open>
+      <details class="document-preview" id="printing-preview">
         <summary>Print settings &amp; quantities <span>3D Printed &middot; spreadsheet</span></summary>
-        <div class="preview-toolbar"><p>UMI-Live parts are listed first, followed by YAM accessories.</p><a href="https://docs.google.com/spreadsheets/d/1lpBRnUCwfG8htZ-RfftRbJUnZEhj3iX3Kp_QXd36MX4/preview?gid=1199623244#gid=1199623244" target="_blank" rel="noopener noreferrer">Open print settings &nearr;</a></div>
+        <div class="preview-toolbar preview-toolbar--actions"><a href="https://docs.google.com/spreadsheets/d/1lpBRnUCwfG8htZ-RfftRbJUnZEhj3iX3Kp_QXd36MX4/preview?gid=1199623244#gid=1199623244" target="_blank" rel="noopener noreferrer">Open print settings &nearr;</a></div>
         <iframe src="https://docs.google.com/spreadsheets/d/1lpBRnUCwfG8htZ-RfftRbJUnZEhj3iX3Kp_QXd36MX4/preview?gid=1199623244&amp;rm=minimal#gid=1199623244" title="Print settings: 3D Printed spreadsheet preview" loading="lazy"></iframe>
       </details>
     </section>
@@ -88,12 +88,12 @@
       <p class="section-kicker">STEP 03</p>
       <h2 id="assembly-title">Assemble, wire, and inspect</h2>
       <div class="build-copy">
-        <p>Follow the assembly guide in order, including its wiring diagrams, power checks, and final checklist.</p>
-        <p>You will need M2/M3 drivers, scissors, flush cutters, a multimeter, and a wire stripper. Keep the carriages on the rail and disconnect the battery before assembly or wiring changes.</p>
+        <p>Follow the assembly guide in order.</p>
+        <p>You will need M2/M3 drivers, scissors, flush cutters, a multimeter, and a wire stripper. Keep the carriages on the rail and ensure the battery is disconnected before assembly or wiring changes.</p>
       </div>
-      <details class="document-preview" id="guide-preview" open>
+      <details class="document-preview" id="guide-preview">
         <summary>Assembly guide <span>v6 &middot; 27 pages &middot; PDF</span></summary>
-        <div class="preview-toolbar"><p>Mechanical assembly, wiring, battery charging, and final checks.</p><a href="./static/docs/UMI-Live-Hardware-Instructions-v6.pdf?v=20261024" target="_blank" rel="noopener noreferrer">Open assembly guide &nearr;</a></div>
+        <div class="preview-toolbar preview-toolbar--actions"><a href="./static/docs/UMI-Live-Hardware-Instructions-v6.pdf?v=20261024" target="_blank" rel="noopener noreferrer">Open assembly guide &nearr;</a></div>
         <iframe src="./static/docs/UMI-Live-Hardware-Instructions-v6.pdf?v=20261024" title="UMI-Live Hardware Instructions v6 PDF preview" loading="lazy" allowfullscreen></iframe>
       </details>
       <div class="build-subsection" id="tags">
@@ -106,13 +106,12 @@
       </details>
       </div>
       <div class="build-subsection" id="charging">
-        <h3>Charge the battery</h3>
-        <p>The battery's two bare-wire leads power the WAGO harness. Its barrel socket is for the supplied charger; the harness's separate barrel output powers the Airy.</p>
+        <h3>Charging</h3>
         <div class="build-copy">
           <ol>
-            <li>Switch OFF. Disconnect all connections to the battery, including both bare-wire leads from the WAGO harness.</li>
-            <li>Plug the supplied charger directly into the battery's charging barrel socket.</li>
-            <li>Unplug the charger before reconnecting the battery to the harness.</li>
+            <li>Switch OFF or disconnect the USB-C (powering the Raspberry Pi) and power jack (powering the LiDAR).</li>
+            <li>Plug the supplied charger into the battery's charging barrel socket.</li>
+            <li>Unplug the charger before switching back ON.</li>
           </ol>
         </div>
         <p><strong>Do not charge and use the battery at the same time.</strong></p>
@@ -123,7 +122,7 @@
       <p class="section-kicker">STEP 04</p>
       <h2 id="software-title">Configure, calibrate, and test</h2>
       <div class="build-copy">
-        <p>After the final inspection and power checks, follow the software guide to install the software, calibrate the camera and gripper, and test recording.</p>
+        <p>After assembly and inspection, follow the software guide to install the software, calibrate the camera and gripper, and test recording.</p>
       </div>
       <div class="build-links">
         <a href="https://github.com/AfterQuery-Research/umi-live#install">Continue to software setup &nearr;</a>
@@ -142,7 +141,7 @@
         <a href="https://drive.google.com/drive/folders/1EYAgEG3YlASO0E8-9rsuuEtYtZreYz7t" target="_blank" rel="noopener noreferrer">Open STEP files &nearr;</a>
         <a href="https://drive.google.com/drive/folders/1aSERmILqNbNlvU1tP3zWQT07wcUmmdxc" target="_blank" rel="noopener noreferrer">Shared backbone &amp; pad files &nearr;</a>
       </div>
-      <details class="document-preview yam-preview" id="yam-preview" open>
+      <details class="document-preview yam-preview" id="yam-preview">
         <summary>YAM print settings &amp; quantities <span>3D Printed &middot; I2RT YAM Parts</span></summary>
         <div class="preview-toolbar">
           <p>Camera mount, finger holders, backbones, pads, and filament totals.</p>
