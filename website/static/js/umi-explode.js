@@ -16,7 +16,7 @@ const LABELS = [
   ['fingers', 'Redesigned gripper fingers', 'Fingers'],
   ['battery', 'Removable battery module', 'Battery'],
 ];
-const LABEL_IN = [0.9, 0.95];   // scroll progress over which the callouts fade in
+const LABEL_LEAD = 0.012, LABEL_SPAN = 0.07;   // each callout starts just before its part lands and takes this long to draw in
 
 const ease = (x) => { x = Math.min(Math.max(x, 0), 1); return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
 const clamp01 = (x) => Math.min(Math.max(x, 0), 1);
@@ -91,13 +91,21 @@ export async function mountExplode(host, opts = {}) {
   const callouts = LABELS.filter(([k]) => D.labels && D.labels[k]).map(([k, text, short]) => {
     const el = document.createElement('div'); el.className = 'umi-explode__label';
     el.innerHTML = `<span class="long">${text}</span><span class="short">${short}</span>`;
+    el.style.opacity = '0';
     labelLayer.appendChild(el);
     const path = document.createElementNS(NS, 'path'); path.setAttribute('class', 'umi-explode__leader'); svg.appendChild(path);
-    const dot = document.createElementNS(NS, 'circle'); dot.setAttribute('r', '3.5'); dot.setAttribute('class', 'umi-explode__dot'); svg.appendChild(dot);
+    const dot = document.createElementNS(NS, 'circle'); dot.setAttribute('r', '0'); dot.setAttribute('class', 'umi-explode__dot'); svg.appendChild(dot);
+    path.style.opacity = dot.style.opacity = '0';
     const pts = D.labels[k].map(([g, a]) => ({ g, a: new THREE.Vector3(...a) }));
     return { el, path, dot, pts, ai: 0, side: 1, x: 0, y: 0, dx: 0, dy: 0, w: 120, h: 20 };
   });
-  const labelsIn = (t) => ease(clamp01((t - LABEL_IN[0]) / (LABEL_IN[1] - LABEL_IN[0])));
+  svg.style.opacity = labelLayer.style.opacity = '1';
+  // when each callout's part reaches its final position (last keyframe of its motion)
+  for (const c of callouts) c.lands = Math.max(...c.pts.map(p => D.keys[p.g] ? D.keys[p.g][D.keys[p.g].length - 1][0] : 0));
+  const firstLand = callouts.length ? Math.min(...callouts.map(c => c.lands)) : 1;
+  // the view eases out to make room for the label columns as the first callouts arrive
+  const labelsIn = (t) => ease(clamp01((t - firstLand + LABEL_LEAD) / 0.14));
+  const backOut = (x) => { const k = 1.7; x -= 1; return x * x * ((k + 1) * x + k) + 1; };
   let labelRoom = 0, labelPad = 28;   // px each side needs for the widest label plus its leader; model-to-text gap
 
   // ---------- state ----------
@@ -127,7 +135,7 @@ export async function mountExplode(host, opts = {}) {
     // label text scales with the stage so it stays in proportion to the model
     const fs = Math.max(narrow ? 9 : 10, Math.min(17, Math.min(W, H * 1.6) * 0.0125));
     host.style.setProperty('--ux-label-size', fs.toFixed(2) + 'px');
-    for (const c of callouts) c.dot.setAttribute('r', Math.max(2.4, Math.min(3.5, fs * 0.22)).toFixed(2));
+    for (const c of callouts) c.r = Math.max(2.4, Math.min(3.5, fs * 0.22));
     labelRoom = 0;
     for (const c of callouts) { c.w = c.el.offsetWidth || 120; c.h = c.el.offsetHeight || 20; labelRoom = Math.max(labelRoom, c.w); }
     labelRoom += Math.round(fs * (narrow ? 2.2 : 3.4));
@@ -195,9 +203,10 @@ export async function mountExplode(host, opts = {}) {
     }
   }
   function updateCallouts(t) {
-    const op = labelsIn(t);
-    svg.style.opacity = labelLayer.style.opacity = op.toFixed(3);
-    if (op <= 0) return;
+    if (labelsIn(t) <= 0) {
+      for (const c of callouts) { c.el.style.opacity = '0'; c.path.style.opacity = '0'; c.dot.style.opacity = '0'; c.shown = 0; }
+      return;
+    }
     const [x0, x1] = screenExtent(t);
     for (const c of callouts) {
       const p = c.pts[c.ai]; offsetOf(p.g, t, tmp); project(v2.copy(p.a).add(tmp), corner);
@@ -214,7 +223,12 @@ export async function mountExplode(host, opts = {}) {
       // text edge that faces the model
       const edge = c.side < 0 ? Math.max(c.w + 8, x0 - pad) : Math.min(W - c.w - 8, x1 + pad);
       const left = c.side < 0 ? edge - c.w : edge;
-      c.el.style.transform = `translate(${left}px, ${c.y - c.h / 2}px)`;
+      // staged entrance: dot pops on the part, the leader draws out to the column, then the text slides in
+      const k = clamp01((t - c.lands + LABEL_LEAD) / LABEL_SPAN);
+      const kDot = clamp01(k / 0.3), kLine = ease(clamp01((k - 0.12) / 0.5)), kText = ease(clamp01((k - 0.45) / 0.55));
+      const slide = (1 - kText) * (narrow ? 8 : 16) * c.side;
+      c.el.style.transform = `translate(${left + slide}px, ${c.y - c.h / 2}px)`;
+      c.el.style.opacity = kText.toFixed(3);
       c.el.classList.toggle('is-right', c.side > 0);
       const end = edge - c.side * 6;                      // leader stops just short of the text
       const knee = end - c.side * (narrow ? 8 : 18);      // any elbow sits just before the text
@@ -222,7 +236,13 @@ export async function mountExplode(host, opts = {}) {
         ? `M${c.dx},${c.dy} L${end},${c.y}`
         : `M${c.dx},${c.dy} L${knee},${c.dy} L${end},${c.y}`;
       c.path.setAttribute('d', d);
+      const len = c.path.getTotalLength();
+      c.path.style.strokeDasharray = `${len} ${len}`;
+      c.path.style.strokeDashoffset = (len * (1 - kLine)).toFixed(1);
+      c.path.style.opacity = kLine > 0 ? '1' : '0';
       c.dot.setAttribute('cx', c.dx); c.dot.setAttribute('cy', c.dy);
+      c.dot.setAttribute('r', (c.r * (kDot > 0 ? backOut(kDot) : 0)).toFixed(2));
+      c.dot.style.opacity = kDot > 0 ? '1' : '0';
     }
   }
 
