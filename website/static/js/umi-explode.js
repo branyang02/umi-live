@@ -86,7 +86,7 @@ export async function mountExplode(host, opts = {}) {
     return { el, path, dot, pts, ai: 0, side: 1, x: 0, y: 0, dx: 0, dy: 0, w: 120, h: 20 };
   });
   const labelsIn = (t) => ease(clamp01((t - LABEL_IN[0]) / (LABEL_IN[1] - LABEL_IN[0])));
-  let labelRoom = 0;   // px each side needs for the widest label plus its leader
+  let labelRoom = 0, labelPad = 28;   // px each side needs for the widest label plus its leader; model-to-text gap
 
   // ---------- state ----------
   const groups = {}; const fasteners = []; let fastMat = null;
@@ -112,9 +112,14 @@ export async function mountExplode(host, opts = {}) {
     host.classList.toggle('is-narrow', narrow);
     renderer.setSize(W, H, false); camera.aspect = W / H; camera.updateProjectionMatrix();
     svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    // label text scales with the stage so it stays in proportion to the model
+    const fs = Math.max(narrow ? 9 : 10, Math.min(17, Math.min(W, H * 1.6) * 0.0125));
+    host.style.setProperty('--ux-label-size', fs.toFixed(2) + 'px');
+    for (const c of callouts) c.dot.setAttribute('r', Math.max(2.4, Math.min(3.5, fs * 0.22)).toFixed(2));
     labelRoom = 0;
     for (const c of callouts) { c.w = c.el.offsetWidth || 120; c.h = c.el.offsetHeight || 20; labelRoom = Math.max(labelRoom, c.w); }
-    labelRoom += narrow ? 22 : 56;
+    labelRoom += Math.round(fs * (narrow ? 2.2 : 3.4));
+    labelPad = Math.round(fs * (narrow ? 1.1 : 1.7));
     assignSides();
     dirty = true;
   }
@@ -192,7 +197,7 @@ export async function mountExplode(host, opts = {}) {
       for (let i = 0; i < col.length; i++) { col[i].y = Math.max(col[i].y, top + col[i].h / 2); if (i) col[i].y = Math.max(col[i].y, col[i - 1].y + (col[i - 1].h + col[i].h) / 2 + gap); }
       for (let i = col.length - 1; i >= 0; i--) { col[i].y = Math.min(col[i].y, bottom - col[i].h / 2); if (i < col.length - 1) col[i].y = Math.min(col[i].y, col[i + 1].y - (col[i + 1].h + col[i].h) / 2 - gap); }
     }
-    const pad = narrow ? 10 : 28;   // space between the model and the start of the text
+    const pad = Math.max(10, labelPad);   // space between the model and the start of the text
     for (const c of callouts) {
       // text edge that faces the model
       const edge = c.side < 0 ? Math.max(c.w + 8, x0 - pad) : Math.min(W - c.w - 8, x1 + pad);

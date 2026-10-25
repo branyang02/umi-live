@@ -57,7 +57,7 @@
   left: 0;
   color: var(--ux-ink);
   font-family: 'Google Sans', 'Noto Sans', sans-serif;
-  font-size: 1.05rem;
+  font-size: var(--ux-label-size, 1.05rem);
   line-height: 1.25;
   letter-spacing: -.01em;
   text-align: right;
@@ -67,7 +67,6 @@
 
 .umi-explode__label.is-right { text-align: left; }
 .umi-explode__label .short { display: none; }
-.umi-explode.is-narrow .umi-explode__label { font-size: .78rem; }
 .umi-explode.is-narrow .umi-explode__label .long { display: none; }
 .umi-explode.is-narrow .umi-explode__label .short { display: inline; }
 
@@ -81,7 +80,7 @@
   align-items: center;
   gap: .5rem;
   color: var(--ux-muted);
-  font-size: .75rem;
+  font-size: max(9px, calc(var(--ux-label-size, 16px) * .72));
   font-weight: 700;
   letter-spacing: .14em;
   text-transform: uppercase;
