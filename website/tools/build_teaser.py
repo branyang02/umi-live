@@ -2,7 +2,9 @@
 """Rebuild the paper teaser video from the camera-ready figure's source assets."""
 
 from pathlib import Path
+import shutil
 import subprocess
+import sys
 
 from PIL import Image, ImageDraw, ImageFont
 
@@ -199,26 +201,38 @@ def write_video():
         frame.save(STAGES / f"stage-{i:02d}.jpg", quality=94, subsampling=0)
     frames[-1].save(ROOT / "static/images/teaser-poster.jpg", quality=94, subsampling=0)
 
-    # Give each cumulative panel time to read, then leave a longer hold on the full figure.
-    ffmpeg = [
-        "/opt/homebrew/bin/ffmpeg", "-y", "-loglevel", "error",
-        "-loop", "1", "-framerate", "24", "-t", "2.75", "-i", str(STAGES / "stage-01.jpg"),
-        "-loop", "1", "-framerate", "24", "-t", "2.75", "-i", str(STAGES / "stage-02.jpg"),
-        "-loop", "1", "-framerate", "24", "-t", "2.75", "-i", str(STAGES / "stage-03.jpg"),
-        "-loop", "1", "-framerate", "24", "-t", "2.75", "-i", str(STAGES / "stage-04.jpg"),
-        "-loop", "1", "-framerate", "24", "-t", "2.75", "-i", str(STAGES / "stage-05.jpg"),
-        "-loop", "1", "-framerate", "24", "-t", "4.35", "-i", str(STAGES / "stage-06.jpg"),
-        "-filter_complex",
-        "[0:v][1:v]xfade=transition=fade:duration=0.35:offset=2.40[x1];"
-        "[x1][2:v]xfade=transition=fade:duration=0.35:offset=4.80[x2];"
-        "[x2][3:v]xfade=transition=fade:duration=0.35:offset=7.20[x3];"
-        "[x3][4:v]xfade=transition=fade:duration=0.35:offset=9.60[x4];"
-        "[x4][5:v]xfade=transition=fade:duration=0.35:offset=12.00,format=yuv420p[v]",
-        "-map", "[v]", "-r", "24", "-an", "-c:v", "libx264", "-crf", "19",
-        "-movflags", "+faststart", str(VIDEO),
-    ]
-    subprocess.run(ffmpeg, check=True)
+    encode_video()
+
+
+# The first panel only holds briefly before "In-the-wild Bimanual Collection" fades in;
+# later panels each get time to read, then the full figure holds longer.
+FIRST_HOLD = 1.0   # seconds of the first panel alone (video time; the page plays at 1.54x)
+STEP = 2.4         # seconds between later fades
+FADE = 0.35        # crossfade length
+FINAL_HOLD = 4.35  # last panel, including its fade-in
+# Encode at 1920x1104: H.264 works in 16-pixel blocks, and a 1106-pixel frame leaves padding rows
+# that some hardware decoders can sample as a flickering dark line along the bottom edge.
+# The two trimmed rows are blank margin.
+OUT_H = 1104
+
+
+def encode_video():
+    ffmpeg_bin = shutil.which("ffmpeg") or "/opt/homebrew/bin/ffmpeg"
+    durations = [FIRST_HOLD + FADE] + [STEP + FADE] * 4 + [FINAL_HOLD]
+    cmd = [ffmpeg_bin, "-y", "-loglevel", "error"]
+    for i, dur in enumerate(durations, start=1):
+        cmd += ["-loop", "1", "-framerate", "24", "-t", f"{dur:.2f}", "-i", str(STAGES / f"stage-{i:02d}.jpg")]
+    chain, prev, offset = [], "0:v", FIRST_HOLD
+    for i in range(1, 6):
+        out = f"x{i}" if i < 5 else "v"
+        tail = f",crop={W}:{OUT_H}:0:{(H - OUT_H) // 2},format=yuv420p" if i == 5 else ""
+        chain.append(f"[{prev}][{i}:v]xfade=transition=fade:duration={FADE}:offset={offset:.2f}{tail}[{out}]")
+        prev, offset = out, offset + STEP
+    cmd += ["-filter_complex", ";".join(chain), "-map", "[v]", "-r", "24", "-an",
+            "-c:v", "libx264", "-crf", "19", "-color_range", "tv", "-movflags", "+faststart", str(VIDEO)]
+    subprocess.run(cmd, check=True)
 
 
 if __name__ == "__main__":
-    write_video()
+    # `--encode-only` re-times the video from the saved stage images without redrawing them.
+    encode_video() if "--encode-only" in sys.argv else write_video()

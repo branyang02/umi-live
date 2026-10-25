@@ -62,13 +62,12 @@ export async function mountExplode(host, opts = {}) {
       <canvas class="umi-explode__canvas" role="img" aria-label="3D model of the UMI-Live handheld unit that separates into its components as you scroll"></canvas>
       <svg class="umi-explode__leaders" aria-hidden="true"></svg>
       <div class="umi-explode__labels"></div>
-      <div class="umi-explode__hint"><span class="umi-explode__hint-text">Scroll to take it apart</span><span class="umi-explode__bar"><i></i></span></div>
+      <div class="umi-explode__hint" aria-hidden="true"><span class="umi-explode__bar"><i></i></span></div>
       <p class="umi-explode__status" role="status">Loading 3D model…</p>
     </div>`;
   const stage = host.querySelector('.umi-explode__stage');
   const canvas = host.querySelector('canvas');
   const bar = host.querySelector('.umi-explode__bar i');
-  const hintText = host.querySelector('.umi-explode__hint-text');
   const status = host.querySelector('.umi-explode__status');
   const svg = host.querySelector('.umi-explode__leaders');
   const labelLayer = host.querySelector('.umi-explode__labels');
@@ -295,7 +294,6 @@ export async function mountExplode(host, opts = {}) {
     renderer.render(scene, camera);
     updateCallouts(t);
     bar.style.transform = `scaleX(${t.toFixed(4)})`;
-    hintText.textContent = t > 0.97 ? 'Scroll up to reassemble' : 'Scroll to take it apart';
   }
 
   // ---------- load ----------

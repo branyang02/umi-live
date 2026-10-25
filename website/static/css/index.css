@@ -117,6 +117,11 @@ body {
   height: auto;
 }
 
+/* White behind the video so nothing dark shows at its edges while it loads or scales. */
+.teaser video {
+  background: #fff;
+}
+
 .page-section {
   padding-block: var(--section-space);
   border-top: 1px solid var(--line);
