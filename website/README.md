@@ -14,9 +14,9 @@ python3 -m http.server 8765 --directory website
 
 Keep the guide consistent with the homepage's Bulma base, 900px desktop content width, Google Sans/Noto Sans typography, shared color variables, and Nerfies template attribution. Keep page-specific CSS and JavaScript separate so changes to the guide do not affect the homepage. The page is plain static HTML and needs no additional build step or dependencies.
 
-The page follows the build in order: source parts, print components, assemble and wire, then configure and test. Source documents sit within the corresponding step; the parts list, print settings, and assembly guide are expanded by default. The printable tag sheet is part of assembly, and robot-side YAM accessories are an optional section. Avoid adding a separate card directory that duplicates these sections.
+The page follows the build in order: source parts, print components, assemble and wire, then configure and test. Source documents sit within the corresponding step as collapsed previews; each opens when clicked or when a section link or URL fragment targets it. The printable tag sheet is part of assembly, and robot-side YAM accessories are an optional section. Avoid adding a separate card directory that duplicates these sections.
 
-Each embedded sheet has an independent zoom selector (50%–200%). JavaScript scales each preview within its frame; it does not edit the sheet or affect the PDF viewers. Without JavaScript, the original sheet embeds remain usable at 100%. Bump the hardware CSS/JS URL version in `hardware.html` when changing these assets so returning visitors load the new controls.
+Sheet and PDF previews are plain embeds shown at their native size, with no zoom control. Bump the `?v=` tag on `hardware.css` and `hardware.js` in `hardware.html` when changing either file so returning visitors load the new version.
 
 The YAM section embeds the same live `3D Printed` sheet through its sheet-preview endpoint, anchored to row 35 (`#1199623244R34`). Its shorter frame starts with the YAM heading in view; visitors can still scroll within the sheet. The direct-open link selects `A35:F46` in Google Sheets. If the YAM section moves, update both the row anchor and direct-open range and verify the embedded view in a browser.
 
