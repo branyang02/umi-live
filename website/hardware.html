@@ -8,16 +8,16 @@
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
   <link rel="stylesheet" href="./static/css/bulma.min.css">
   <link rel="stylesheet" href="./static/css/index.css?v=20261023-teaser-once">
-  <link rel="stylesheet" href="./static/css/hardware.css?v=20261024-toolbar">
+  <link rel="stylesheet" href="./static/css/hardware.css?v=20261025-toc-hover">
   <link rel="icon" type="image/png" href="./static/images/umi-logo.png">
-  <script defer src="./static/js/hardware.js?v=20261020-zoom2"></script>
+  <script defer src="./static/js/hardware.js?v=20261024-no-zoom"></script>
 </head>
 <body class="hardware-page">
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="hardware-nav">
     <div class="hardware-container">
       <a class="hardware-brand" href="./index.html">UMI-Live</a>
-      <a href="./index.html">Back to project <span aria-hidden="true">&nearr;</span></a>
+      <a href="./index.html"><span aria-hidden="true">&larr;</span> Back to project</a>
     </div>
   </header>
 
@@ -40,12 +40,12 @@
     <nav class="build-nav hardware-container" id="resources" aria-labelledby="contents-title">
       <h2 id="contents-title">Table of contents</h2>
       <ol>
-        <li><a href="#parts">Source parts <span aria-hidden="true">&darr;</span></a></li>
-        <li><a href="#files">Print components <span aria-hidden="true">&darr;</span></a></li>
-        <li><a href="#assembly">Assemble &amp; wire <span aria-hidden="true">&darr;</span></a></li>
-        <li><a href="#software">Configure &amp; test <span aria-hidden="true">&darr;</span></a></li>
+        <li><a href="#parts">Source the parts <span aria-hidden="true">&darr;</span></a></li>
+        <li><a href="#files">Print the UMI-Live components <span aria-hidden="true">&darr;</span></a></li>
+        <li><a href="#assembly">Assemble, wire, and inspect <span aria-hidden="true">&darr;</span></a></li>
+        <li><a href="#software">Configure, calibrate, and test <span aria-hidden="true">&darr;</span></a></li>
       </ol>
-      <p class="build-nav-extra"><a href="#yam">I2RT YAM hardware <span aria-hidden="true">&darr;</span></a></p>
+      <p class="build-nav-extra"><a href="#yam">Build the I2RT YAM gripper and camera mount <span aria-hidden="true">&darr;</span></a></p>
     </nav>
 
     <!-- Keep the live source documents beside the build steps they support. -->
@@ -57,8 +57,10 @@
         <p>Check pack sizes and purchase notes before ordering. Fractional quantities show approximately how much of a pack the build uses.</p>
       </div>
       <details class="document-preview" id="parts-preview">
-        <summary>Parts &amp; sourcing <span>Off the Shelf &middot; spreadsheet</span></summary>
-        <div class="preview-toolbar preview-toolbar--actions"><a href="https://docs.google.com/spreadsheets/d/1lpBRnUCwfG8htZ-RfftRbJUnZEhj3iX3Kp_QXd36MX4/preview?gid=0#gid=0" target="_blank" rel="noopener noreferrer">Open parts spreadsheet &nearr;</a></div>
+        <summary>
+          <span class="preview-title">Parts &amp; sourcing <span class="preview-meta">Off the Shelf &middot; spreadsheet</span></span>
+          <a class="preview-open" href="https://docs.google.com/spreadsheets/d/1lpBRnUCwfG8htZ-RfftRbJUnZEhj3iX3Kp_QXd36MX4/preview?gid=0#gid=0" target="_blank" rel="noopener noreferrer">Open parts spreadsheet &nearr;</a>
+        </summary>
         <iframe src="https://docs.google.com/spreadsheets/d/1lpBRnUCwfG8htZ-RfftRbJUnZEhj3iX3Kp_QXd36MX4/preview?gid=0&amp;rm=minimal#gid=0" title="Parts list: Off the Shelf spreadsheet preview" loading="lazy"></iframe>
       </details>
     </section>
@@ -69,17 +71,19 @@
       <div class="build-copy">
         <ol>
           <li>Download the STL files and keep their supplied print orientation. Use the STEP assembly to inspect or modify parts.</li>
-          <li>Use the defaults in the <strong>3D Printed</strong> tab, which are based on the Bambu Studio P1S/P2S <strong>0.20 mm Standard</strong> settings. Follow each part's material, support, brim, and slicer settings. Some parts require bridging.</li>
+          <li>Use the defaults in the <strong>3D Printed</strong> tab, which are based on the <strong>Bambu Studio P1S/P2S 0.20 mm Standard</strong> settings. Follow each part's material, support, brim, and slicer settings. Some parts require bridging.</li>
           <li>Print the listed quantities and remove all supports. Use the illustrated parts list in the assembly guide to identify each part.</li>
         </ol>
       </div>
       <div class="build-links">
-        <a href="https://drive.google.com/drive/folders/1aSERmILqNbNlvU1tP3zWQT07wcUmmdxc" target="_blank" rel="noopener noreferrer">Download UMI-Live STL files &nearr;</a>
-        <a href="https://drive.google.com/drive/folders/1J5adTWDS-Il32CPbCDhqkBn5mkC3Nm9l" target="_blank" rel="noopener noreferrer">Open STEP assembly &nearr;</a>
+        <a href="https://drive.google.com/drive/folders/1aSERmILqNbNlvU1tP3zWQT07wcUmmdxc" target="_blank" rel="noopener noreferrer">Open UMI-Live STL folder &nearr;</a>
+        <a href="https://drive.google.com/drive/folders/1J5adTWDS-Il32CPbCDhqkBn5mkC3Nm9l" target="_blank" rel="noopener noreferrer">Open UMI-Live STEP folder &nearr;</a>
       </div>
       <details class="document-preview" id="printing-preview">
-        <summary>Print settings &amp; quantities <span>3D Printed &middot; spreadsheet</span></summary>
-        <div class="preview-toolbar preview-toolbar--actions"><a href="https://docs.google.com/spreadsheets/d/1lpBRnUCwfG8htZ-RfftRbJUnZEhj3iX3Kp_QXd36MX4/preview?gid=1199623244#gid=1199623244" target="_blank" rel="noopener noreferrer">Open print settings &nearr;</a></div>
+        <summary>
+          <span class="preview-title">Print settings &amp; quantities <span class="preview-meta">3D Printed &middot; spreadsheet</span></span>
+          <a class="preview-open" href="https://docs.google.com/spreadsheets/d/1lpBRnUCwfG8htZ-RfftRbJUnZEhj3iX3Kp_QXd36MX4/preview?gid=1199623244#gid=1199623244" target="_blank" rel="noopener noreferrer">Open print settings &nearr;</a>
+        </summary>
         <iframe src="https://docs.google.com/spreadsheets/d/1lpBRnUCwfG8htZ-RfftRbJUnZEhj3iX3Kp_QXd36MX4/preview?gid=1199623244&amp;rm=minimal#gid=1199623244" title="Print settings: 3D Printed spreadsheet preview" loading="lazy"></iframe>
       </details>
     </section>
@@ -92,16 +96,20 @@
         <p>You will need M2/M3 drivers, scissors, flush cutters, a multimeter, and a wire stripper. Keep the carriages on the rail and ensure the battery is disconnected before assembly or wiring changes.</p>
       </div>
       <details class="document-preview" id="guide-preview">
-        <summary>Assembly guide <span>v6 &middot; 27 pages &middot; PDF</span></summary>
-        <div class="preview-toolbar preview-toolbar--actions"><a href="./static/docs/UMI-Live-Hardware-Instructions-v6.pdf?v=20261024" target="_blank" rel="noopener noreferrer">Open assembly guide &nearr;</a></div>
+        <summary>
+          <span class="preview-title">Assembly guide <span class="preview-meta">v6 &middot; 27 pages &middot; PDF</span></span>
+          <a class="preview-open" href="./static/docs/UMI-Live-Hardware-Instructions-v6.pdf?v=20261024" target="_blank" rel="noopener noreferrer">Open assembly guide &nearr;</a>
+        </summary>
         <iframe src="./static/docs/UMI-Live-Hardware-Instructions-v6.pdf?v=20261024" title="UMI-Live Hardware Instructions v6 PDF preview" loading="lazy" allowfullscreen></iframe>
       </details>
       <div class="build-subsection" id="tags">
         <h3>Print and fit the ArUco tags</h3>
         <p>Print the tag PDF at <strong>100% / actual size</strong>, with Fit and Shrink disabled. Check the 50 mm scale before cutting and keep the white margins. Follow the assembly guide for placement and IDs.</p>
       <details class="document-preview" id="tags-preview">
-        <summary>Printable ArUco tags <span>IDs 0&ndash;3 &middot; US Letter PDF</span></summary>
-        <div class="preview-toolbar"><p>16 mm markers with 2 mm white margins.</p><a href="https://drive.google.com/file/d/19DiKg10A1ViMvCTIxdkUXhvksLtead8F/view" target="_blank" rel="noopener noreferrer">Open tag PDF to print &nearr;</a></div>
+        <summary>
+          <span class="preview-title">Printable ArUco tags <span class="preview-meta">IDs 0&ndash;3 &middot; US Letter PDF</span></span>
+          <a class="preview-open" href="https://drive.google.com/file/d/19DiKg10A1ViMvCTIxdkUXhvksLtead8F/view" target="_blank" rel="noopener noreferrer">Open tag PDF &nearr;</a>
+        </summary>
         <iframe src="https://drive.google.com/file/d/19DiKg10A1ViMvCTIxdkUXhvksLtead8F/preview" title="Printable ArUco tags 0 to 3 PDF preview" loading="lazy" allowfullscreen></iframe>
       </details>
       </div>
@@ -125,28 +133,27 @@
         <p>After assembly and inspection, follow the software guide to install the software, calibrate the camera and gripper, and test recording.</p>
       </div>
       <div class="build-links">
-        <a href="https://github.com/AfterQuery-Research/umi-live#install">Continue to software setup &nearr;</a>
+        <a href="https://github.com/AfterQuery-Research/umi-live#install" target="_blank" rel="noopener noreferrer">Continue to software setup &nearr;</a>
       </div>
     </section>
 
     <section class="build-section hardware-container" id="yam" aria-labelledby="yam-title">
       <p class="section-kicker">ROBOT-SIDE HARDWARE</p>
-      <h2 id="yam-title">Build the YAM gripper and camera mount</h2>
+      <h2 id="yam-title">Build the I2RT YAM gripper and camera mount</h2>
       <div class="build-copy">
         <p>For each YAM gripper, print one camera mount, one left and one right finger holder, two finger backbones, and two pads.</p>
-        <p>The YAM folder contains the mount and holders. Use the shared UMI-Live files for the backbones and pads. Follow the <strong>I2RT YAM Parts</strong> settings below; its quantities and filament totals are separate from the handheld build.</p>
+        <p>The YAM folder contains the mount and holders. Use the shared UMI-Live files for the backbones and pads. Follow the <strong>I2RT YAM Parts</strong> settings below; the YAM quantities and filament totals are separate from the handheld build.</p>
       </div>
       <div class="build-links">
-        <a href="https://drive.google.com/drive/folders/16nqxxOQhA5n1YojcbUWS6ieyay3F7Am8" target="_blank" rel="noopener noreferrer">Download YAM STL files &nearr;</a>
-        <a href="https://drive.google.com/drive/folders/1EYAgEG3YlASO0E8-9rsuuEtYtZreYz7t" target="_blank" rel="noopener noreferrer">Open STEP files &nearr;</a>
-        <a href="https://drive.google.com/drive/folders/1aSERmILqNbNlvU1tP3zWQT07wcUmmdxc" target="_blank" rel="noopener noreferrer">Shared backbone &amp; pad files &nearr;</a>
+        <a href="https://drive.google.com/drive/folders/16nqxxOQhA5n1YojcbUWS6ieyay3F7Am8" target="_blank" rel="noopener noreferrer">Open YAM STL folder &nearr;</a>
+        <a href="https://drive.google.com/drive/folders/1EYAgEG3YlASO0E8-9rsuuEtYtZreYz7t" target="_blank" rel="noopener noreferrer">Open YAM STEP folder &nearr;</a>
+        <a href="https://drive.google.com/drive/folders/1aSERmILqNbNlvU1tP3zWQT07wcUmmdxc" target="_blank" rel="noopener noreferrer">Open shared backbone &amp; pad folder &nearr;</a>
       </div>
       <details class="document-preview yam-preview" id="yam-preview">
-        <summary>YAM print settings &amp; quantities <span>3D Printed &middot; I2RT YAM Parts</span></summary>
-        <div class="preview-toolbar">
-          <p>Camera mount, finger holders, backbones, pads, and filament totals.</p>
-          <a href="https://docs.google.com/spreadsheets/d/1lpBRnUCwfG8htZ-RfftRbJUnZEhj3iX3Kp_QXd36MX4/edit#gid=1199623244&amp;range=A35:F46" target="_blank" rel="noopener noreferrer">Open YAM print settings &nearr;</a>
-        </div>
+        <summary>
+          <span class="preview-title">YAM print settings &amp; quantities <span class="preview-meta">3D Printed &middot; I2RT YAM Parts &middot; spreadsheet</span></span>
+          <a class="preview-open" href="https://docs.google.com/spreadsheets/d/1lpBRnUCwfG8htZ-RfftRbJUnZEhj3iX3Kp_QXd36MX4/edit#gid=1199623244&amp;range=A35:F46" target="_blank" rel="noopener noreferrer">Open YAM print settings &nearr;</a>
+        </summary>
         <iframe src="https://docs.google.com/spreadsheets/u/0/d/1lpBRnUCwfG8htZ-RfftRbJUnZEhj3iX3Kp_QXd36MX4/preview/sheet?gid=1199623244#1199623244R34" title="YAM print settings: 3D Printed sheet scrolled to I2RT YAM Parts" loading="lazy"></iframe>
       </details>
     </section>
