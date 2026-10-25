@@ -2,7 +2,7 @@ const container = document.querySelector("#splat-viewer");
 const status = document.querySelector("#splat-status");
 // 3D Gaussian splat of a UMI-Live unit, reconstructed from handheld video of the device.
 // Units: device height = 1, +Y up from the table, origin at the centre of its footprint.
-const sceneUrl = "./static/splats/umi-live.ksplat";
+const sceneUrl = "./static/splats/umi-live.ksplat?v=20261025-4k";  // bump with the asset (10-minute browser cache)
 
 async function start() {
   try {

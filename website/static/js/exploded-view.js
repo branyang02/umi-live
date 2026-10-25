@@ -12,8 +12,9 @@ const stage = track && track.querySelector(".explode-stage");
 const canvas = stage && stage.querySelector("canvas");
 const labelLayer = stage && stage.querySelector(".explode-labels");
 const hint = stage && stage.querySelector(".explode-hint span");
-const MODEL_URL = "./static/models/umi-live-cad.glb";
-const LAYOUT_URL = "./static/models/umi-live-explode.json";
+// Version tags: GitHub Pages lets browsers reuse files for 10 minutes, so bump these with the assets.
+const MODEL_URL = "./static/models/umi-live-cad.glb?v=20261025-v3";
+const LAYOUT_URL = "./static/models/umi-live-explode.json?v=20261025-v3";
 
 // Fraction of the pinned scroll spent assembled (start) and fully exploded (end).
 const HOLD_START = 0.06;
