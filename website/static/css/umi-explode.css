@@ -6,7 +6,7 @@
   --ux-line: #9fb0ae;
   --ux-wash: var(--wash, #f5f8f7);
   position: relative;
-  height: 360vh;
+  height: 300vh; /* 200vh of scroll drives the animation */
   background: #fff;
 }
 
@@ -72,5 +72,5 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .umi-explode { height: 260vh; }
+  .umi-explode { height: 223vh; }
 }
