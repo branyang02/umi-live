@@ -6,8 +6,16 @@
   --ux-line: #9fb0ae;
   --ux-wash: var(--wash, #f5f8f7);
   position: relative;
-  height: 267vh; /* 167vh of scroll drives the animation */
   background: #fff;
+}
+
+/* Only the live 3D view gets the tall scroll track; the static figure keeps its natural height. */
+.umi-explode.is-live {
+  height: 267vh; /* 167vh of scroll drives the animation */
+}
+
+.umi-explode__fallback {
+  margin-inline: auto;
 }
 
 .umi-explode__stage {
@@ -111,8 +119,4 @@
   margin: 0;
   color: var(--ux-muted);
   font-size: .9rem;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .umi-explode { height: 209vh; }
 }

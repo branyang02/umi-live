@@ -335,6 +335,7 @@ body {
   .splat-viewer {
     height: 320px;
   }
+
 }
 
 @media (prefers-reduced-motion: reduce) {

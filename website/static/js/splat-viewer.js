@@ -2,9 +2,9 @@ const container = document.querySelector("#splat-viewer");
 const status = document.querySelector("#splat-status");
 // 3D Gaussian splat of a UMI-Live unit, reconstructed from handheld video of the device.
 // Units: device height = 1, +Y up from the table, origin at the centre of its footprint.
-const sceneUrl = "./static/splats/umi-live.ksplat";
+const sceneUrl = "./static/splats/umi-live.ksplat?v=20261025-4k";  // bump with the asset (10-minute browser cache)
 
-if (container && status) {
+async function start() {
   try {
     const [THREE, GaussianSplats3D] = await Promise.all([
       import("three"),
@@ -18,8 +18,8 @@ if (container && status) {
       rootElement: container,
       threeScene: scene,
       cameraUp: [0, 1, 0],
-      initialCameraPosition: [-1.46, 1.48, -0.68],
-      initialCameraLookAt: [-0.22, 0.48, 0.04],
+      initialCameraPosition: [-1.48, 1.35, 0.79],
+      initialCameraLookAt: [-0.15, 0.5, 0.04],
       useBuiltInControls: true,
       gpuAcceleratedSort: false,
       sharedMemoryForWorkers: false,
@@ -29,15 +29,12 @@ if (container && status) {
       sceneRevealMode: GaussianSplats3D.SceneRevealMode.Instant
     });
 
-    // Keep the orbit within the angles the phone video covered well: looking down from at
-    // least ~33 degrees above the table, and away from the cable side of the unit
-    // (azimuth -70 to 70 degrees about +Y, where the capture is sparse).
+    // The walk-around video covers every side, so the orbit goes all the way round; it stops
+    // about 5 degrees above the table, below which the camera never went.
     const controls = viewer.controls;
     if (controls) {
       controls.minPolarAngle = 0.15;
-      controls.maxPolarAngle = 1.0;
-      controls.minAzimuthAngle = 1.22;
-      controls.maxAzimuthAngle = -1.22;
+      controls.maxPolarAngle = 1.48;
       controls.minDistance = 1.2;
       controls.maxDistance = 5.0;
     }
@@ -53,4 +50,15 @@ if (container && status) {
     status.classList.add("splat-status--error");
     status.textContent = "3D preview unavailable in this browser.";
   }
+}
+
+// Fetch the 6 MB splat only once the reader gets near the section.
+if (container && status) {
+  const observer = new IntersectionObserver((entries) => {
+    if (entries.some((entry) => entry.isIntersecting)) {
+      observer.disconnect();
+      start();
+    }
+  }, { rootMargin: "100% 0px" });
+  observer.observe(container);
 }

@@ -2,8 +2,8 @@
 // Mount: <div class="umi-explode" data-umi-explode data-model="./static/models/umi-explode.glb" data-timeline="./static/models/umi-explode.json"></div>
 // Parts move along precomputed, collision-checked keyframe paths (CAD units: mm, Z up).
 import * as THREE from 'three';
-import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/loaders/GLTFLoader.js';
-import { RoomEnvironment } from 'https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/environments/RoomEnvironment.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
 // Callouts shown once the parts have separated: [key in data.labels, text, short text for phones]
 const LABELS = [
@@ -40,9 +40,21 @@ function interp1(keys, t) {
   }
   return keys[keys.length - 1][1];
 }
+function webglAvailable() {
+  try { const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl')); } catch { return false; }
+}
+
+// Leaves the host's static fallback figure in place when motion is reduced, WebGL is missing,
+// or the data or model can't be loaded.
 export async function mountExplode(host, opts = {}) {
-  const D = opts.data || await (await fetch(host.dataset.timeline)).json();
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if ((reduce && !opts.force) || !webglAvailable()) return;
+  let D = opts.data;
+  if (!D) {
+    try { D = await (await fetch(host.dataset.timeline)).json(); } catch { return; }
+  }
+  const fallbackHTML = host.innerHTML;
+  host.classList.add('is-live');
 
   host.innerHTML = `
     <div class="umi-explode__stage">
@@ -269,7 +281,7 @@ export async function mountExplode(host, opts = {}) {
     status.remove(); host.classList.add('is-ready');
     layout(); readScroll(); prog = target; dirty = true;
   };
-  const onError = () => { status.textContent = 'The 3D model could not be loaded.'; };
+  const onError = () => { host.classList.remove('is-live', 'is-ready'); host.innerHTML = fallbackHTML; visible = false; };
   const loader = new GLTFLoader();
   if (opts.model instanceof ArrayBuffer) loader.parse(opts.model, '', onModel, onError);
   else loader.load(opts.model || host.dataset.model, onModel, undefined, onError);
