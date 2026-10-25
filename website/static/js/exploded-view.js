@@ -11,7 +11,6 @@ const track = section && section.querySelector(".explode-track");
 const stage = track && track.querySelector(".explode-stage");
 const canvas = stage && stage.querySelector("canvas");
 const labelLayer = stage && stage.querySelector(".explode-labels");
-const hint = stage && stage.querySelector(".explode-hint span");
 // Version tags: GitHub Pages lets browsers reuse files for 10 minutes, so bump these with the assets.
 const MODEL_URL = "./static/models/umi-live-cad.glb?v=20261025-v3";
 const LAYOUT_URL = "./static/models/umi-live-explode.json?v=20261025-v3";
@@ -179,9 +178,6 @@ async function start() {
       // label timing: parts that move show theirs once their last move lands, parts that stay near the end
       m.local = m.moves.length ? m.moves[m.moves.length - 1].local : e;
     }
-
-    stage.style.setProperty("--explode-progress", e.toFixed(4));
-    if (hint) hint.textContent = e < 0.97 ? "Scroll to take it apart" : "Scroll up to reassemble";
 
     // Camera: a slow quarter turn while the parts separate, pulled back just enough that every part
     // stays inside the frame (less the label columns at the sides).
