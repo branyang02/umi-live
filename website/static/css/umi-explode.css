@@ -61,6 +61,7 @@
   line-height: 1.25;
   letter-spacing: -.01em;
   text-align: right;
+  white-space: nowrap;
   will-change: transform;
 }
 

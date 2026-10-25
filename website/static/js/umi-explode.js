@@ -73,19 +73,20 @@ export async function mountExplode(host, opts = {}) {
   const toWorld = (v, out) => out.set(v.x, v.z, -v.y);
 
   // ---------- callouts ----------
+  // Each label sits in a column just outside the model on the side nearest its part, at the part's height,
+  // joined by a short horizontal leader (with a small elbow only when labels have to make room for each other).
   const NS = 'http://www.w3.org/2000/svg';
-  const callouts = LABELS.filter(([k]) => D.labels && D.labels[k]).map(([k, text, short], i) => {
+  const callouts = LABELS.filter(([k]) => D.labels && D.labels[k]).map(([k, text, short]) => {
     const el = document.createElement('div'); el.className = 'umi-explode__label';
     el.innerHTML = `<span class="long">${text}</span><span class="short">${short}</span>`;
     labelLayer.appendChild(el);
-    const pts = D.labels[k].map(([g, a]) => {
-      const path = document.createElementNS(NS, 'path'); path.setAttribute('class', 'umi-explode__leader'); svg.appendChild(path);
-      const dot = document.createElementNS(NS, 'circle'); dot.setAttribute('r', '3.5'); dot.setAttribute('class', 'umi-explode__dot'); svg.appendChild(dot);
-      return { g, a: new THREE.Vector3(...a), path, dot, x: 0, y: 0 };
-    });
-    return { el, pts, i, side: 1, y: 0, h: 20 };
+    const path = document.createElementNS(NS, 'path'); path.setAttribute('class', 'umi-explode__leader'); svg.appendChild(path);
+    const dot = document.createElementNS(NS, 'circle'); dot.setAttribute('r', '3.5'); dot.setAttribute('class', 'umi-explode__dot'); svg.appendChild(dot);
+    const pts = D.labels[k].map(([g, a]) => ({ g, a: new THREE.Vector3(...a) }));
+    return { el, path, dot, pts, ai: 0, side: 1, x: 0, y: 0, dx: 0, dy: 0, w: 120, h: 20 };
   });
   const labelsIn = (t) => ease(clamp01((t - LABEL_IN[0]) / (LABEL_IN[1] - LABEL_IN[0])));
+  let labelRoom = 0;   // px each side needs for the widest label plus its leader
 
   // ---------- state ----------
   const groups = {}; const fasteners = []; let fastMat = null;
@@ -104,16 +105,16 @@ export async function mountExplode(host, opts = {}) {
   }
 
   // ---------- layout ----------
-  let W = 1, H = 1, narrow = false, colW = 200, gutter = 24;
+  let W = 1, H = 1, narrow = false;
   function layout() {
     const r = stage.getBoundingClientRect(); W = Math.max(1, r.width); H = Math.max(1, r.height);
     narrow = W < 640;
     host.classList.toggle('is-narrow', narrow);
-    gutter = (W - Math.min(1180, W - 2 * Math.max(16, W * 0.03))) / 2;
-    colW = narrow ? 64 : W < 1000 ? 150 : 210;
     renderer.setSize(W, H, false); camera.aspect = W / H; camera.updateProjectionMatrix();
     svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-    for (const c of callouts) { c.el.style.width = colW + 'px'; c.h = c.el.offsetHeight || 20; }
+    labelRoom = 0;
+    for (const c of callouts) { c.w = c.el.offsetWidth || 120; c.h = c.el.offsetHeight || 20; labelRoom = Math.max(labelRoom, c.w); }
+    labelRoom += narrow ? 22 : 56;
     assignSides();
     dirty = true;
   }
@@ -142,7 +143,7 @@ export async function mountExplode(host, opts = {}) {
     const tanV = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
     // make room for the callout columns as they arrive
     const side = Math.max(16, W * (narrow ? 0.04 : 0.12));
-    const usableW = W - 2 * (side + (gutter + colW + (narrow ? 10 : 40) - side) * labelsIn(t));
+    const usableW = W - 2 * (side + Math.max(0, labelRoom + 16 - side) * labelsIn(t));
     const usableH = H * (narrow ? 0.78 : 0.8);
     const dist = Math.max(hh / (tanV * usableH / H), hw / (tanV * usableW / H)) + hd;
     camera.position.copy(fwd).multiplyScalar(dist).add(look);
@@ -152,40 +153,59 @@ export async function mountExplode(host, opts = {}) {
     key.position.copy(camera.position).addScaledVector(right, -dist * 0.6).addScaledVector(up, dist * 0.8);
   }
   function project(vModel, out) { toWorld(vModel, wc).project(camera); return out.set((wc.x * 0.5 + 0.5) * W, (-wc.y * 0.5 + 0.5) * H, 0); }
-  // sides are fixed from the final pose so labels never jump across the model
+  // screen-space horizontal extent of the model at time t (camera must already be placed)
+  function screenExtent(t) {
+    let x0 = Infinity, x1 = -Infinity;
+    for (const g in D.bounds) {
+      const b = D.bounds[g]; const p = D.latch[g] ? offsetOf(D.latch[g].parent, t, tmp) : offsetOf(g, t, tmp);
+      for (let i = 0; i < 8; i++) {
+        corner.set((i & 1 ? b[1][0] : b[0][0]) + p.x, (i & 2 ? b[1][1] : b[0][1]) + p.y, (i & 4 ? b[1][2] : b[0][2]) + p.z);
+        const sx = project(corner, v2).x; x0 = Math.min(x0, sx); x1 = Math.max(x1, sx);
+      }
+    }
+    return [x0, x1];
+  }
+  // each label goes on the side of the model nearest its part, decided once from the final pose
   function assignSides() {
     if (!callouts.length) return;
     placeCamera(1, 0, 0);
+    const [x0, x1] = screenExtent(1);
     for (const c of callouts) {
-      let sx = 0; for (const p of c.pts) { offsetOf(p.g, 1, tmp); sx += project(v2.copy(p.a).add(tmp), corner).x; }
-      c.side = sx / c.pts.length < W / 2 ? -1 : 1;
+      const xs = c.pts.map(p => { offsetOf(p.g, 1, tmp); return project(v2.copy(p.a).add(tmp), corner).x; });
+      const mean = xs.reduce((a, b) => a + b, 0) / xs.length;
+      c.side = (mean - x0) < (x1 - mean) ? -1 : 1;
+      c.ai = xs.indexOf(c.side < 0 ? Math.min(...xs) : Math.max(...xs));   // the part nearest that side
     }
   }
   function updateCallouts(t) {
     const op = labelsIn(t);
     svg.style.opacity = labelLayer.style.opacity = op.toFixed(3);
     if (op <= 0) return;
+    const [x0, x1] = screenExtent(t);
     for (const c of callouts) {
-      let sy = 0;
-      for (const p of c.pts) { offsetOf(p.g, t, tmp); project(v2.copy(p.a).add(tmp), corner); p.x = corner.x; p.y = corner.y; sy += p.y; }
-      c.y = sy / c.pts.length;
+      const p = c.pts[c.ai]; offsetOf(p.g, t, tmp); project(v2.copy(p.a).add(tmp), corner);
+      c.dx = corner.x; c.dy = corner.y; c.y = c.dy;
     }
-    const top = narrow ? 56 : 64, bottom = H - (narrow ? 84 : 92), gap = narrow ? 8 : 14;
+    const top = narrow ? 40 : 48, bottom = H - (narrow ? 84 : 92), gap = narrow ? 6 : 10;
     for (const s of [-1, 1]) {
       const col = callouts.filter(c => c.side === s).sort((a, b) => a.y - b.y);
       for (let i = 0; i < col.length; i++) { col[i].y = Math.max(col[i].y, top + col[i].h / 2); if (i) col[i].y = Math.max(col[i].y, col[i - 1].y + (col[i - 1].h + col[i].h) / 2 + gap); }
       for (let i = col.length - 1; i >= 0; i--) { col[i].y = Math.min(col[i].y, bottom - col[i].h / 2); if (i < col.length - 1) col[i].y = Math.min(col[i].y, col[i + 1].y - (col[i + 1].h + col[i].h) / 2 - gap); }
     }
+    const pad = narrow ? 10 : 28;   // space between the model and the start of the text
     for (const c of callouts) {
-      const x = c.side < 0 ? gutter : W - gutter - colW;
-      c.el.style.transform = `translate(${x}px, ${c.y - c.h / 2}px)`;
+      // text edge that faces the model
+      const edge = c.side < 0 ? Math.max(c.w + 8, x0 - pad) : Math.min(W - c.w - 8, x1 + pad);
+      const left = c.side < 0 ? edge - c.w : edge;
+      c.el.style.transform = `translate(${left}px, ${c.y - c.h / 2}px)`;
       c.el.classList.toggle('is-right', c.side > 0);
-      const lx = c.side < 0 ? gutter + colW + 8 : W - gutter - colW - 8;
-      const elbow = lx - c.side * (narrow ? 10 : 24);
-      for (const p of c.pts) {
-        p.path.setAttribute('d', `M${lx},${c.y} L${elbow},${c.y} L${p.x},${p.y}`);
-        p.dot.setAttribute('cx', p.x); p.dot.setAttribute('cy', p.y);
-      }
+      const end = edge - c.side * 6;                      // leader stops just short of the text
+      const knee = end - c.side * (narrow ? 8 : 18);      // any elbow sits just before the text
+      const d = Math.abs(c.y - c.dy) < 0.5
+        ? `M${c.dx},${c.dy} L${end},${c.y}`
+        : `M${c.dx},${c.dy} L${knee},${c.dy} L${end},${c.y}`;
+      c.path.setAttribute('d', d);
+      c.dot.setAttribute('cx', c.dx); c.dot.setAttribute('cy', c.dy);
     }
   }
 
