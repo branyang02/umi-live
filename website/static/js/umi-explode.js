@@ -5,6 +5,19 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/loaders/GLTFLoader.js';
 import { RoomEnvironment } from 'https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/environments/RoomEnvironment.js';
 
+// Callouts shown once the parts have separated: [key in data.labels, text, short text for phones]
+const LABELS = [
+  ['lidar', 'LiDAR', 'LiDAR'],
+  ['lcd', 'LCD screen', 'LCD'],
+  ['buttons', 'Operator-facing buttons', 'Buttons'],
+  ['pi', 'Raspberry Pi 5', 'Pi 5'],
+  ['camera', 'Camera', 'Camera'],
+  ['aruco', 'ArUco tag locations', 'ArUco tags'],
+  ['fingers', 'Redesigned gripper fingers', 'Fingers'],
+  ['battery', 'Removable battery module', 'Battery'],
+];
+const LABEL_IN = [0.9, 0.95];   // scroll progress over which the callouts fade in
+
 const ease = (x) => { x = Math.min(Math.max(x, 0), 1); return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
 const clamp01 = (x) => Math.min(Math.max(x, 0), 1);
 
@@ -34,6 +47,8 @@ export async function mountExplode(host, opts = {}) {
   host.innerHTML = `
     <div class="umi-explode__stage">
       <canvas class="umi-explode__canvas" role="img" aria-label="3D model of the UMI-Live handheld unit that separates into its components as you scroll"></canvas>
+      <svg class="umi-explode__leaders" aria-hidden="true"></svg>
+      <div class="umi-explode__labels"></div>
       <div class="umi-explode__hint"><span class="umi-explode__hint-text">Scroll to take it apart</span><span class="umi-explode__bar"><i></i></span></div>
       <p class="umi-explode__status" role="status">Loading 3D model…</p>
     </div>`;
@@ -42,6 +57,8 @@ export async function mountExplode(host, opts = {}) {
   const bar = host.querySelector('.umi-explode__bar i');
   const hintText = host.querySelector('.umi-explode__hint-text');
   const status = host.querySelector('.umi-explode__status');
+  const svg = host.querySelector('.umi-explode__leaders');
+  const labelLayer = host.querySelector('.umi-explode__labels');
 
   // ---------- renderer ----------
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
@@ -54,6 +71,21 @@ export async function mountExplode(host, opts = {}) {
   const key = new THREE.DirectionalLight(0xffffff, 1.1); scene.add(key);
   const root = new THREE.Group(); root.rotation.x = -Math.PI / 2; scene.add(root); // CAD is Z-up
   const toWorld = (v, out) => out.set(v.x, v.z, -v.y);
+
+  // ---------- callouts ----------
+  const NS = 'http://www.w3.org/2000/svg';
+  const callouts = LABELS.filter(([k]) => D.labels && D.labels[k]).map(([k, text, short], i) => {
+    const el = document.createElement('div'); el.className = 'umi-explode__label';
+    el.innerHTML = `<span class="long">${text}</span><span class="short">${short}</span>`;
+    labelLayer.appendChild(el);
+    const pts = D.labels[k].map(([g, a]) => {
+      const path = document.createElementNS(NS, 'path'); path.setAttribute('class', 'umi-explode__leader'); svg.appendChild(path);
+      const dot = document.createElementNS(NS, 'circle'); dot.setAttribute('r', '3.5'); dot.setAttribute('class', 'umi-explode__dot'); svg.appendChild(dot);
+      return { g, a: new THREE.Vector3(...a), path, dot, x: 0, y: 0 };
+    });
+    return { el, pts, i, side: 1, y: 0, h: 20 };
+  });
+  const labelsIn = (t) => ease(clamp01((t - LABEL_IN[0]) / (LABEL_IN[1] - LABEL_IN[0])));
 
   // ---------- state ----------
   const groups = {}; const fasteners = []; let fastMat = null;
@@ -72,12 +104,17 @@ export async function mountExplode(host, opts = {}) {
   }
 
   // ---------- layout ----------
-  let W = 1, H = 1, narrow = false;
+  let W = 1, H = 1, narrow = false, colW = 200, gutter = 24;
   function layout() {
     const r = stage.getBoundingClientRect(); W = Math.max(1, r.width); H = Math.max(1, r.height);
     narrow = W < 640;
     host.classList.toggle('is-narrow', narrow);
+    gutter = (W - Math.min(1180, W - 2 * Math.max(16, W * 0.03))) / 2;
+    colW = narrow ? 64 : W < 1000 ? 150 : 210;
     renderer.setSize(W, H, false); camera.aspect = W / H; camera.updateProjectionMatrix();
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    for (const c of callouts) { c.el.style.width = colW + 'px'; c.h = c.el.offsetHeight || 20; }
+    assignSides();
     dirty = true;
   }
 
@@ -103,7 +140,9 @@ export async function mountExplode(host, opts = {}) {
     look.addScaledVector(right, (r0 + r1) / 2).addScaledVector(up, (u0 + u1) / 2);
     const hw = (r1 - r0) / 2, hh = (u1 - u0) / 2;
     const tanV = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
-    const usableW = W - 2 * Math.max(16, W * (narrow ? 0.04 : 0.12));
+    // make room for the callout columns as they arrive
+    const side = Math.max(16, W * (narrow ? 0.04 : 0.12));
+    const usableW = W - 2 * (side + (gutter + colW + (narrow ? 10 : 40) - side) * labelsIn(t));
     const usableH = H * (narrow ? 0.78 : 0.8);
     const dist = Math.max(hh / (tanV * usableH / H), hw / (tanV * usableW / H)) + hd;
     camera.position.copy(fwd).multiplyScalar(dist).add(look);
@@ -112,6 +151,44 @@ export async function mountExplode(host, opts = {}) {
     camera.up.set(0, 1, 0); camera.lookAt(look);
     key.position.copy(camera.position).addScaledVector(right, -dist * 0.6).addScaledVector(up, dist * 0.8);
   }
+  function project(vModel, out) { toWorld(vModel, wc).project(camera); return out.set((wc.x * 0.5 + 0.5) * W, (-wc.y * 0.5 + 0.5) * H, 0); }
+  // sides are fixed from the final pose so labels never jump across the model
+  function assignSides() {
+    if (!callouts.length) return;
+    placeCamera(1, 0, 0);
+    for (const c of callouts) {
+      let sx = 0; for (const p of c.pts) { offsetOf(p.g, 1, tmp); sx += project(v2.copy(p.a).add(tmp), corner).x; }
+      c.side = sx / c.pts.length < W / 2 ? -1 : 1;
+    }
+  }
+  function updateCallouts(t) {
+    const op = labelsIn(t);
+    svg.style.opacity = labelLayer.style.opacity = op.toFixed(3);
+    if (op <= 0) return;
+    for (const c of callouts) {
+      let sy = 0;
+      for (const p of c.pts) { offsetOf(p.g, t, tmp); project(v2.copy(p.a).add(tmp), corner); p.x = corner.x; p.y = corner.y; sy += p.y; }
+      c.y = sy / c.pts.length;
+    }
+    const top = narrow ? 56 : 64, bottom = H - (narrow ? 84 : 92), gap = narrow ? 8 : 14;
+    for (const s of [-1, 1]) {
+      const col = callouts.filter(c => c.side === s).sort((a, b) => a.y - b.y);
+      for (let i = 0; i < col.length; i++) { col[i].y = Math.max(col[i].y, top + col[i].h / 2); if (i) col[i].y = Math.max(col[i].y, col[i - 1].y + (col[i - 1].h + col[i].h) / 2 + gap); }
+      for (let i = col.length - 1; i >= 0; i--) { col[i].y = Math.min(col[i].y, bottom - col[i].h / 2); if (i < col.length - 1) col[i].y = Math.min(col[i].y, col[i + 1].y - (col[i + 1].h + col[i].h) / 2 - gap); }
+    }
+    for (const c of callouts) {
+      const x = c.side < 0 ? gutter : W - gutter - colW;
+      c.el.style.transform = `translate(${x}px, ${c.y - c.h / 2}px)`;
+      c.el.classList.toggle('is-right', c.side > 0);
+      const lx = c.side < 0 ? gutter + colW + 8 : W - gutter - colW - 8;
+      const elbow = lx - c.side * (narrow ? 10 : 24);
+      for (const p of c.pts) {
+        p.path.setAttribute('d', `M${lx},${c.y} L${elbow},${c.y} L${p.x},${p.y}`);
+        p.dot.setAttribute('cx', p.x); p.dot.setAttribute('cy', p.y);
+      }
+    }
+  }
+
   // ---------- scroll ----------
   let target = 0, prog = 0, dirty = true, px = 0, py = 0, tpx = 0, tpy = 0, visible = true;
   function readScroll() {
@@ -149,6 +226,7 @@ export async function mountExplode(host, opts = {}) {
 
     placeCamera(t, px, py);
     renderer.render(scene, camera);
+    updateCallouts(t);
     bar.style.transform = `scaleX(${t.toFixed(4)})`;
     hintText.textContent = t > 0.97 ? 'Scroll up to reassemble' : 'Scroll to take it apart';
   }
