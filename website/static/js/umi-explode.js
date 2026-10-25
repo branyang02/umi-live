@@ -85,7 +85,7 @@ export async function mountExplode(host, opts = {}) {
   const fwd = new THREE.Vector3(), right = new THREE.Vector3(), up = new THREE.Vector3(), look = new THREE.Vector3(), center = new THREE.Vector3();
   function placeCamera(t, px, py) {
     const e = ease(clamp01((t - 0.06) / 0.8));
-    const az = THREE.MathUtils.degToRad((narrow ? 66 - 42 * e : 46 - 40 * e) + px * 5), el = THREE.MathUtils.degToRad(17 - 7 * e - py * 3);
+    const az = THREE.MathUtils.degToRad((narrow ? 66 - 34 * e : 46 - 26 * e) + px * 5), el = THREE.MathUtils.degToRad(17 - 7 * e - py * 3);
     toWorld(v2.set(Math.cos(el) * Math.cos(az), Math.cos(el) * Math.sin(az), Math.sin(el)), fwd).normalize();
     boundsAt(t); box.getCenter(center); toWorld(center, look);
     up.set(0, 1, 0); right.crossVectors(up, fwd).normalize(); up.crossVectors(fwd, right).normalize();
