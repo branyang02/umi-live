@@ -206,7 +206,7 @@ def write_video():
 
 # The first panel only holds briefly before "In-the-wild Bimanual Collection" fades in;
 # later panels each get time to read, then the full figure holds longer.
-FIRST_HOLD = 1.0   # seconds of the first panel alone (video time; the page plays at 1.54x)
+FIRST_HOLD = 0.5   # seconds of the first panel alone (video time; the page plays at 1.54x)
 STEP = 2.4         # seconds between later fades
 FADE = 0.35        # crossfade length
 FINAL_HOLD = 4.35  # last panel, including its fade-in
