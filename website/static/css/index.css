@@ -170,6 +170,182 @@ body {
   margin: 0;
 }
 
+/* Scroll-driven exploded view: a full-width sticky stage inside a slightly taller track. */
+.explode-track {
+  --explode-scroll: 120vh;
+  display: none;
+  position: relative;
+  height: calc(100vh + var(--explode-scroll));
+}
+
+.explode-ready .explode-track {
+  display: block;
+}
+
+.explode-ready .explode-fallback {
+  display: none;
+}
+
+.explode-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  background: #fff;
+}
+
+.explode-stage canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.explode-labels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.explode-leaders {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.explode-leaders polyline {
+  fill: none;
+  stroke: #8d9a99;
+  stroke-width: 1;
+}
+
+.explode-leaders circle {
+  fill: var(--ink);
+}
+
+.explode-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: var(--ink);
+  font-size: .95rem;
+  white-space: nowrap;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.explode-num {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: grid;
+  place-items: center;
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 50%;
+  background: var(--ink);
+  color: #fff;
+  font-size: .65rem;
+  font-weight: 600;
+  opacity: 0;
+}
+
+.explode-legend {
+  position: absolute;
+  right: 1rem;
+  bottom: 2.75rem;
+  left: 1rem;
+  display: none;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .35rem .75rem;
+  margin: 0;
+  padding: 0;
+  color: var(--ink);
+  font-size: .75rem;
+  line-height: 1.25;
+  list-style: none;
+  opacity: 0;
+}
+
+.explode-stage--narrow .explode-legend {
+  display: grid;
+}
+
+.explode-legend li {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+}
+
+.explode-legend .explode-num {
+  position: static;
+  flex-shrink: 0;
+  opacity: 1;
+}
+
+.explode-skip {
+  position: absolute;
+  right: 1.25rem;
+  bottom: 1rem;
+  font-size: .8rem;
+  opacity: 0;
+  transition: opacity .2s ease;
+}
+
+.explode-loaded .explode-num {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: grid;
+  place-items: center;
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 50%;
+  background: var(--ink);
+  color: #fff;
+  font-size: .65rem;
+  font-weight: 600;
+  opacity: 0;
+}
+
+.explode-legend {
+  position: absolute;
+  right: 1rem;
+  bottom: 2.75rem;
+  left: 1rem;
+  display: none;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .35rem .75rem;
+  margin: 0;
+  padding: 0;
+  color: var(--ink);
+  font-size: .75rem;
+  line-height: 1.25;
+  list-style: none;
+  opacity: 0;
+}
+
+.explode-stage--narrow .explode-legend {
+  display: grid;
+}
+
+.explode-legend li {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+}
+
+.explode-legend .explode-num {
+  position: static;
+  flex-shrink: 0;
+  opacity: 1;
+}
+
+.explode-skip {
+  opacity: .8;
+}
+
 .demo-group + .demo-group {
   margin-top: var(--section-space);
 }
@@ -335,6 +511,11 @@ body {
   .splat-viewer {
     height: 320px;
   }
+
+  .explode-track {
+    --explode-scroll: 80vh;
+  }
+
 }
 
 @media (prefers-reduced-motion: reduce) {

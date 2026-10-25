@@ -15,7 +15,7 @@
   <link rel="icon" type="image/png" href="./static/images/umi-logo.png">
 
   <script type="importmap">
-    {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js"}}
+    {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}
   </script>
 
   <script defer src="./static/js/fontawesome.all.min.js"></script>
@@ -92,9 +92,16 @@
       <h2 class="section-title">Hardware components</h2>
       <a href="./hardware.html">Hardware setup guide &rarr;</a>
     </div>
-    <figure class="exploded-figure">
+    <figure class="exploded-figure explode-fallback">
       <img draggable="false" src="./static/images/exploded-view.png" alt="Exploded CAD view of the UMI-Live handheld unit, labeling the camera, ArUco tag locations, redesigned gripper fingers, removable battery module, LiDAR, LCD screen, Raspberry Pi 5, and operator-facing buttons" loading="lazy">
     </figure>
+  </div>
+  <div class="explode-track" aria-hidden="true">
+    <div class="explode-stage">
+      <canvas></canvas>
+      <div class="explode-labels"></div>
+      <a class="explode-skip" href="#hardware-view" tabindex="-1">Skip &darr;</a>
+    </div>
   </div>
 </section>
 
@@ -221,6 +228,7 @@
   </div>
 </footer>
 
+<script type="module" src="./static/js/exploded-view.js"></script>
 <script type="module" src="./static/js/splat-viewer.js"></script>
 </body>
 </html>
