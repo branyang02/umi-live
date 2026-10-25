@@ -17,7 +17,7 @@ const LABELS = [
   ['battery', 'Removable battery module', 'Battery'],
 ];
 const LABEL_SPAN = 0.07;                // scroll progress each callout takes to draw in
-const LABEL_WINDOW = [0.14, 0.86];      // callout entrances are spread evenly across this part of the scroll
+const LABEL_WINDOW = [0.24, 0.86];      // callout entrances are spread evenly across this part of the scroll
 
 const ease = (x) => { x = Math.min(Math.max(x, 0), 1); return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
 const clamp01 = (x) => Math.min(Math.max(x, 0), 1);
