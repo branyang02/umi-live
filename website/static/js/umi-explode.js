@@ -144,7 +144,7 @@ export async function mountExplode(host, opts = {}) {
     labelRoom = 0;
     for (const c of callouts) { c.w = c.el.offsetWidth || 120; c.h = c.el.offsetHeight || 20; labelRoom = Math.max(labelRoom, c.w); }
     labelRoom += Math.round(fs * (narrow ? 2.2 : 3.4));
-    labelPad = Math.round(fs * (narrow ? 1.1 : 1.7));
+    labelPad = Math.round(fs * (narrow ? 1.4 : 2.4));
     assignSides();
     dirty = true;
   }
@@ -152,7 +152,7 @@ export async function mountExplode(host, opts = {}) {
   // ---------- camera ----------
   const fwd = new THREE.Vector3(), right = new THREE.Vector3(), up = new THREE.Vector3(), look = new THREE.Vector3(), center = new THREE.Vector3();
   // scroll sets a slowly swinging base view; dragging adds an orbit offset on top (degrees)
-  function placeCamera(t, dAz = 0, dEl = 0) {
+  function placeCamera(t, dAz = 0, dEl = 0, zoom = 1) {
     const e = ease(clamp01((t - 0.06) / 0.8));
     const az = THREE.MathUtils.degToRad((narrow ? 66 - 34 * e : 46 - 26 * e) + dAz);
     const el = THREE.MathUtils.degToRad(Math.min(75, Math.max(-12, 17 - 7 * e + dEl)));
@@ -177,11 +177,12 @@ export async function mountExplode(host, opts = {}) {
     const side = Math.max(16, W * (narrow ? 0.04 : 0.12));
     const usableW = W - 2 * (side + Math.max(0, labelRoom + 16 - side) * labelsIn(t));
     const usableH = H * (narrow ? 0.78 : 0.8);
-    const dist = Math.max(hh / (tanV * usableH / H), hw / (tanV * usableW / H)) + hd;
+    const dist = (Math.max(hh / (tanV * usableH / H), hw / (tanV * usableW / H)) + hd) * zoom;
     camera.position.copy(fwd).multiplyScalar(dist).add(look);
     // keep the depth range tight around the model so nearly coincident CAD faces don't flicker
     camera.near = Math.max(1, dist - hd * 1.5 - 40); camera.far = dist + hd * 1.5 + 40; camera.updateProjectionMatrix();
     camera.up.set(0, 1, 0); camera.lookAt(look);
+    camera.updateMatrixWorld();   // so projections made before the next render use this pose
     key.position.copy(camera.position).addScaledVector(right, -dist * 0.6).addScaledVector(up, dist * 0.8);
   }
   function project(vModel, out) { toWorld(vModel, wc).project(camera); return out.set((wc.x * 0.5 + 0.5) * W, (-wc.y * 0.5 + 0.5) * H, 0); }
@@ -276,7 +277,7 @@ export async function mountExplode(host, opts = {}) {
   let target = 0, prog = 0, dirty = true, visible = true, flipping = false;
   // ---------- drag to orbit ----------
   // Mouse drags orbit both ways; touch drags orbit sideways only, so vertical swipes still scroll the page.
-  let orbAz = 0, orbEl = 0, velAz = 0, velEl = 0, drag = null, resetting = false;
+  let orbAz = 0, orbEl = 0, velAz = 0, velEl = 0, drag = null, resetting = false, zoomFix = 1;
   canvas.addEventListener('pointerdown', (e) => {
     if (e.button !== 0) return;
     drag = { id: e.pointerId, x: e.clientX, y: e.clientY, touch: e.pointerType !== 'mouse', moved: false };
@@ -340,7 +341,20 @@ export async function mountExplode(host, opts = {}) {
     const mu = ease(clamp01(fu / 0.8));
     for (const f of fasteners) { f.o.visible = op > 0.003; if (f.d) f.o.position.copy(f.d).multiplyScalar(f.l * mu); }
 
-    placeCamera(t, orbAz, orbEl);
+    // Fit, then check the model's real on-screen width against the room the labels need and back
+    // the camera off if it would crowd them (the box-based fit can under-estimate after a drag).
+    placeCamera(t, orbAz, orbEl, zoomFix);
+    {
+      const [x0, x1] = screenExtent(t);
+      const need = Math.max(16, W * 0.03) + (labelRoom + Math.max(10, labelPad)) * labelsIn(t);
+      const avail = Math.max(40, W / 2 - need), half = Math.max(W / 2 - x0, x1 - W / 2);
+      const want = Math.min(3, Math.max(1, zoomFix * half / avail));
+      if (Math.abs(want - zoomFix) > 1e-3) {
+        zoomFix = want > zoomFix ? want : zoomFix + (want - zoomFix) * 0.25;   // back off at once, ease back in
+        placeCamera(t, orbAz, orbEl, zoomFix);
+        dirty = true;
+      }
+    }
     renderer.render(scene, camera);
     updateCallouts(t);
     bar.style.transform = `scaleX(${t.toFixed(4)})`;
