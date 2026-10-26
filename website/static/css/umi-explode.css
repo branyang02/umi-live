@@ -34,6 +34,11 @@
   height: 100%;
   display: block;
   touch-action: pan-y;
+  cursor: grab;
+}
+
+.umi-explode.is-dragging .umi-explode__canvas {
+  cursor: grabbing;
 }
 
 .umi-explode__leaders,

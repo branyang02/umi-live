@@ -151,9 +151,11 @@ export async function mountExplode(host, opts = {}) {
 
   // ---------- camera ----------
   const fwd = new THREE.Vector3(), right = new THREE.Vector3(), up = new THREE.Vector3(), look = new THREE.Vector3(), center = new THREE.Vector3();
-  function placeCamera(t, px, py) {
+  // scroll sets a slowly swinging base view; dragging adds an orbit offset on top (degrees)
+  function placeCamera(t, dAz = 0, dEl = 0) {
     const e = ease(clamp01((t - 0.06) / 0.8));
-    const az = THREE.MathUtils.degToRad((narrow ? 66 - 34 * e : 46 - 26 * e) + px * 5), el = THREE.MathUtils.degToRad(17 - 7 * e - py * 3);
+    const az = THREE.MathUtils.degToRad((narrow ? 66 - 34 * e : 46 - 26 * e) + dAz);
+    const el = THREE.MathUtils.degToRad(Math.min(75, Math.max(-12, 17 - 7 * e + dEl)));
     toWorld(v2.set(Math.cos(el) * Math.cos(az), Math.cos(el) * Math.sin(az), Math.sin(el)), fwd).normalize();
     boundsAt(t); box.getCenter(center); toWorld(center, look);
     up.set(0, 1, 0); right.crossVectors(up, fwd).normalize(); up.crossVectors(fwd, right).normalize();
@@ -195,7 +197,7 @@ export async function mountExplode(host, opts = {}) {
     }
     return [x0, x1];
   }
-  // each label goes on the side of the model nearest its part, decided once from the final pose
+  // initial sides from the default final view; updateCallouts keeps them right as the view turns
   function assignSides() {
     if (!callouts.length) return;
     placeCamera(1, 0, 0);
@@ -205,17 +207,32 @@ export async function mountExplode(host, opts = {}) {
       const mean = xs.reduce((a, b) => a + b, 0) / xs.length;
       c.side = (mean - x0) < (x1 - mean) ? -1 : 1;
       c.ai = xs.indexOf(c.side < 0 ? Math.min(...xs) : Math.max(...xs));   // the part nearest that side
+      c.flipAt = -1e9;
     }
   }
+  const FLIP_MS = 260;   // a label that changes sides fades back in over this long
   function updateCallouts(t) {
     if (labelsIn(t) <= 0) {
       for (const c of callouts) { c.el.style.opacity = '0'; c.path.style.opacity = '0'; c.dot.style.opacity = '0'; c.shown = 0; }
       return;
     }
     const [x0, x1] = screenExtent(t);
+    // Sides are judged from where each part ends up (final pose) as seen from the current camera,
+    // so labels stay put while scrolling and only swap when dragging turns the model around.
+    const [f0, f1] = screenExtent(1);
+    const xc = (f0 + f1) / 2, hyst = (f1 - f0) * 0.04, now = performance.now();
+    flipping = false;
     for (const c of callouts) {
-      const p = c.pts[c.ai]; offsetOf(p.g, t, tmp); project(v2.copy(p.a).add(tmp), corner);
+      const fin = c.pts.map(p => { offsetOf(p.g, 1, tmp); return project(v2.copy(p.a).add(tmp), corner).x; });
+      const mean = fin.reduce((a, x) => a + x, 0) / fin.length;
+      const want = c.side < 0 ? (mean > xc + hyst ? 1 : -1) : (mean < xc - hyst ? -1 : 1);
+      if (want !== c.side) { c.side = want; c.flipAt = now; }
+      let best = 0; fin.forEach((x, i) => { if (c.side * x > c.side * fin[best]) best = i; });
+      c.ai = best;
+      const p = c.pts[best]; offsetOf(p.g, t, tmp); project(v2.copy(p.a).add(tmp), corner);
       c.dx = corner.x; c.dy = corner.y; c.y = c.dy;
+      c.flip = clamp01((now - c.flipAt) / FLIP_MS);
+      if (c.flip < 1) flipping = true;
     }
     const top = narrow ? 40 : 48, bottom = H - (narrow ? 84 : 92), gap = narrow ? 6 : 10;
     for (const s of [-1, 1]) {
@@ -230,7 +247,7 @@ export async function mountExplode(host, opts = {}) {
       const left = c.side < 0 ? edge - c.w : edge;
       // staged entrance: dot pops on the part, the leader draws out to the column, then the text slides in
       const k = clamp01((t - c.start) / LABEL_SPAN);
-      const kDot = clamp01(k / 0.3), kLine = ease(clamp01((k - 0.12) / 0.5)), kText = ease(clamp01((k - 0.45) / 0.55));
+      const kDot = clamp01(k / 0.3), kLine = ease(clamp01((k - 0.12) / 0.5)) * ease(c.flip), kText = ease(clamp01((k - 0.45) / 0.55)) * ease(c.flip);
       const slide = (1 - kText) * (narrow ? 8 : 16) * c.side;
       c.el.style.transform = `translate(${left + slide}px, ${c.y - c.h / 2}px)`;
       c.el.style.opacity = kText.toFixed(3);
@@ -256,22 +273,55 @@ export async function mountExplode(host, opts = {}) {
   }
 
   // ---------- scroll ----------
-  let target = 0, prog = 0, dirty = true, px = 0, py = 0, tpx = 0, tpy = 0, visible = true;
+  let target = 0, prog = 0, dirty = true, visible = true, flipping = false;
+  // ---------- drag to orbit ----------
+  // Mouse drags orbit both ways; touch drags orbit sideways only, so vertical swipes still scroll the page.
+  let orbAz = 0, orbEl = 0, velAz = 0, velEl = 0, drag = null, resetting = false;
+  canvas.addEventListener('pointerdown', (e) => {
+    if (e.button !== 0) return;
+    drag = { id: e.pointerId, x: e.clientX, y: e.clientY, touch: e.pointerType !== 'mouse', moved: false };
+    velAz = velEl = 0; resetting = false;
+    canvas.setPointerCapture(e.pointerId); host.classList.add('is-dragging');
+  });
+  canvas.addEventListener('pointermove', (e) => {
+    if (!drag || e.pointerId !== drag.id) return;
+    const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+    drag.x = e.clientX; drag.y = e.clientY;
+    const k = 180 / Math.max(480, Math.min(W, 1400));   // about half a turn per screen width
+    velAz = -dx * k; velEl = drag.touch ? 0 : dy * k * 0.8;
+    orbAz += velAz; orbEl = Math.min(58, Math.max(-28, orbEl + velEl));
+    dirty = true;
+  });
+  const endDrag = (e) => {
+    if (!drag || e.pointerId !== drag.id) return;
+    drag = null; host.classList.remove('is-dragging');
+    if (reduce) velAz = velEl = 0;
+  };
+  canvas.addEventListener('pointerup', endDrag);
+  canvas.addEventListener('pointercancel', endDrag);
+  canvas.addEventListener('dblclick', () => { resetting = true; velAz = velEl = 0; dirty = true; });   // back to the default view
   function readScroll() {
     const r = host.getBoundingClientRect(); const len = host.offsetHeight - innerHeight;
     target = clamp01(-r.top / Math.max(1, len));
   }
   addEventListener('scroll', readScroll, { passive: true });
   addEventListener('resize', () => { layout(); readScroll(); });
-  host.addEventListener('pointermove', (e) => { if (e.pointerType !== 'mouse') return; tpx = e.clientX / innerWidth - 0.5; tpy = e.clientY / innerHeight - 0.5; }, { passive: true });
   new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible) dirty = true; }).observe(host);
 
   function frame() {
     requestAnimationFrame(frame);
     if (!visible || !fastMat) return;
     const dp = target - prog; prog += Math.abs(dp) < 1e-5 || reduce ? dp : dp * 0.12;
-    px += (tpx - px) * 0.06; py += (tpy - py) * 0.06;
-    const still = Math.abs(dp) < 1e-5 && Math.abs(tpx - px) < 1e-4 && Math.abs(tpy - py) < 1e-4;
+    // coast after a flick, or glide home after a double-click
+    if (!drag && (Math.abs(velAz) > 0.01 || Math.abs(velEl) > 0.01)) {
+      orbAz += velAz; orbEl = Math.min(58, Math.max(-28, orbEl + velEl)); velAz *= 0.92; velEl *= 0.92;
+    } else if (!drag) { velAz = velEl = 0; }
+    if (resetting) {
+      orbAz = ((orbAz % 360) + 540) % 360 - 180;   // take the short way round
+      orbAz *= 0.85; orbEl *= 0.85;
+      if (Math.abs(orbAz) < 0.05 && Math.abs(orbEl) < 0.05) { orbAz = orbEl = 0; resetting = false; }
+    }
+    const still = Math.abs(dp) < 1e-5 && !drag && velAz === 0 && velEl === 0 && !resetting && !flipping;
     if (!dirty && still) return;
     dirty = false;
     const t = prog;
@@ -290,7 +340,7 @@ export async function mountExplode(host, opts = {}) {
     const mu = ease(clamp01(fu / 0.8));
     for (const f of fasteners) { f.o.visible = op > 0.003; if (f.d) f.o.position.copy(f.d).multiplyScalar(f.l * mu); }
 
-    placeCamera(t, px, py);
+    placeCamera(t, orbAz, orbEl);
     renderer.render(scene, camera);
     updateCallouts(t);
     bar.style.transform = `scaleX(${t.toFixed(4)})`;
