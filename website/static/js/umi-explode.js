@@ -62,6 +62,7 @@ export async function mountExplode(host, opts = {}) {
       <canvas class="umi-explode__canvas" role="img" aria-label="3D model of the UMI-Live handheld unit that separates into its components as you scroll"></canvas>
       <svg class="umi-explode__leaders" aria-hidden="true"></svg>
       <div class="umi-explode__labels"></div>
+      <div class="umi-explode__drag" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M4 12a8 8 0 0 1 13.7-5.6M20 12a8 8 0 0 1-13.7 5.6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M17.7 2.8v3.6h-3.6M6.3 21.2v-3.6h3.6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Drag to view</div>
       <div class="umi-explode__hint" aria-hidden="true"><span class="umi-explode__bar"><i></i></span></div>
       <p class="umi-explode__status" role="status">Loading 3D model…</p>
     </div>`;
@@ -154,7 +155,7 @@ export async function mountExplode(host, opts = {}) {
   // scroll sets a slowly swinging base view; dragging adds an orbit offset on top (degrees)
   function placeCamera(t, dAz = 0, dEl = 0, zoom = 1) {
     const e = ease(clamp01((t - 0.06) / 0.8));
-    const az = THREE.MathUtils.degToRad((narrow ? 66 - 34 * e : 46 - 26 * e) + dAz);
+    const az = THREE.MathUtils.degToRad((narrow ? 114 + 34 * e : 134 + 26 * e) + dAz);   // from the operator's side, fingers pointing left
     const el = THREE.MathUtils.degToRad(Math.min(75, Math.max(-12, 17 - 7 * e + dEl)));
     toWorld(v2.set(Math.cos(el) * Math.cos(az), Math.cos(el) * Math.sin(az), Math.sin(el)), fwd).normalize();
     boundsAt(t); box.getCenter(center); toWorld(center, look);
@@ -278,16 +279,20 @@ export async function mountExplode(host, opts = {}) {
   // ---------- drag to orbit ----------
   // Mouse drags orbit both ways; touch drags orbit sideways only, so vertical swipes still scroll the page.
   let orbAz = 0, orbEl = 0, velAz = 0, velEl = 0, drag = null, resetting = false, zoomFix = 1;
+  // The model turns slowly on its own; any drag takes over, and it picks the turn back up after a pause.
+  const AUTO_SPEED = 6, AUTO_IDLE = 3500;   // degrees per second; ms of no interaction before it resumes
+  let autoSpd = 0, lastInteract = -Infinity, lastFrame = performance.now();
   canvas.addEventListener('pointerdown', (e) => {
     if (e.button !== 0) return;
     drag = { id: e.pointerId, x: e.clientX, y: e.clientY, touch: e.pointerType !== 'mouse', moved: false };
+    lastInteract = performance.now(); autoSpd = 0;
     velAz = velEl = 0; resetting = false;
-    canvas.setPointerCapture(e.pointerId); host.classList.add('is-dragging');
+    canvas.setPointerCapture(e.pointerId); host.classList.add('is-dragging', 'has-dragged');
   });
   canvas.addEventListener('pointermove', (e) => {
     if (!drag || e.pointerId !== drag.id) return;
     const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
-    drag.x = e.clientX; drag.y = e.clientY;
+    drag.x = e.clientX; drag.y = e.clientY; lastInteract = performance.now();
     const k = 180 / Math.max(480, Math.min(W, 1400));   // about half a turn per screen width
     velAz = -dx * k; velEl = drag.touch ? 0 : dy * k * 0.8;
     orbAz += velAz; orbEl = Math.min(58, Math.max(-28, orbEl + velEl));
@@ -295,12 +300,12 @@ export async function mountExplode(host, opts = {}) {
   });
   const endDrag = (e) => {
     if (!drag || e.pointerId !== drag.id) return;
-    drag = null; host.classList.remove('is-dragging');
+    drag = null; host.classList.remove('is-dragging'); lastInteract = performance.now();
     if (reduce) velAz = velEl = 0;
   };
   canvas.addEventListener('pointerup', endDrag);
   canvas.addEventListener('pointercancel', endDrag);
-  canvas.addEventListener('dblclick', () => { resetting = true; velAz = velEl = 0; dirty = true; });   // back to the default view
+  canvas.addEventListener('dblclick', () => { resetting = true; velAz = velEl = 0; autoSpd = 0; lastInteract = performance.now(); dirty = true; });   // back to the default view
   function readScroll() {
     const r = host.getBoundingClientRect(); const len = host.offsetHeight - innerHeight;
     target = clamp01(-r.top / Math.max(1, len));
@@ -313,6 +318,12 @@ export async function mountExplode(host, opts = {}) {
     requestAnimationFrame(frame);
     if (!visible || !fastMat) return;
     const dp = target - prog; prog += Math.abs(dp) < 1e-5 || reduce ? dp : dp * 0.12;
+    const nowT = performance.now(), dt = Math.min(0.1, (nowT - lastFrame) / 1000); lastFrame = nowT;
+    // idle turntable: eases in after a pause, stops the moment someone grabs the model
+    const autoTarget = (reduce || drag || resetting || nowT - lastInteract < AUTO_IDLE) ? 0 : AUTO_SPEED;
+    autoSpd += (autoTarget - autoSpd) * Math.min(1, dt * 1.5);
+    if (Math.abs(autoSpd) < 1e-3 && autoTarget === 0) autoSpd = 0;
+    orbAz += autoSpd * dt;
     // coast after a flick, or glide home after a double-click
     if (!drag && (Math.abs(velAz) > 0.01 || Math.abs(velEl) > 0.01)) {
       orbAz += velAz; orbEl = Math.min(58, Math.max(-28, orbEl + velEl)); velAz *= 0.92; velEl *= 0.92;
@@ -322,7 +333,7 @@ export async function mountExplode(host, opts = {}) {
       orbAz *= 0.85; orbEl *= 0.85;
       if (Math.abs(orbAz) < 0.05 && Math.abs(orbEl) < 0.05) { orbAz = orbEl = 0; resetting = false; }
     }
-    const still = Math.abs(dp) < 1e-5 && !drag && velAz === 0 && velEl === 0 && !resetting && !flipping;
+    const still = Math.abs(dp) < 1e-5 && !drag && velAz === 0 && velEl === 0 && !resetting && !flipping && autoSpd === 0 && (reduce || nowT - lastInteract < AUTO_IDLE);
     if (!dirty && still) return;
     dirty = false;
     const t = prog;

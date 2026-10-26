@@ -81,6 +81,26 @@
 .umi-explode.is-narrow .umi-explode__label .long { display: none; }
 .umi-explode.is-narrow .umi-explode__label .short { display: inline; }
 
+/* Small corner prompt; it fades once someone has tried dragging. */
+.umi-explode__drag {
+  position: absolute;
+  right: max(1.25rem, env(safe-area-inset-right, 0px));
+  bottom: max(1.25rem, env(safe-area-inset-bottom, 0px));
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  color: var(--ux-muted);
+  font-family: 'Google Sans', 'Noto Sans', sans-serif;
+  font-size: max(11px, calc(var(--ux-label-size, 16px) * .8));
+  letter-spacing: .01em;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .4s ease;
+}
+
+.umi-explode.is-ready .umi-explode__drag { opacity: .85; }
+.umi-explode.has-dragged .umi-explode__drag { opacity: 0; }
+
 .umi-explode__hint {
   position: absolute;
   left: 50%;
