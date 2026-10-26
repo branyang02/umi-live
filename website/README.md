@@ -1,5 +1,6 @@
 # UMI-Live project page
 
+
 This is a static project page based on the original [Nerfies website template](https://github.com/nerfies/nerfies.github.io), checked out at commit `657409a62d59a93163872c0e4921cf651b987810`. The adapted page keeps the template's simple Bulma-based paper layout and attribution. The page links separately to UMI Flow, UMI Teleop, and AfterQuery LeRobot.
 
 Serve the page locally from the repository root:
