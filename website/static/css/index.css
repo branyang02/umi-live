@@ -255,42 +255,6 @@ body {
   border: 0;
 }
 
-.splat-viewer {
-  position: relative;
-  width: 100%;
-  height: 440px;
-  overflow: hidden;
-  background: #fff;
-}
-
-.splat-viewer canvas {
-  display: block;
-  width: 100%;
-  height: 100%;
-  cursor: grab;
-  touch-action: none;
-}
-
-.splat-viewer canvas:active {
-  cursor: grabbing;
-}
-
-.splat-status {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  margin: 0;
-  color: var(--muted);
-  font-size: .85rem;
-  text-align: center;
-  pointer-events: none;
-}
-
-.splat-status--error {
-  color: var(--muted);
-}
-
 .citation-details pre {
   margin: 0;
   background: var(--wash);
@@ -338,9 +302,6 @@ body {
     height: min(75vh, 600px);
   }
 
-  .splat-viewer {
-    height: 320px;
-  }
 
 }
 
