@@ -236,7 +236,8 @@ body {
 }
 
 .dataset-explorer {
-  margin-top: var(--section-space);
+  width: calc(100% - 2 * var(--page-gutter));
+  margin: var(--section-space) auto 0;
 }
 
 .dataset-embed {
@@ -250,7 +251,7 @@ body {
 .dataset-embed iframe {
   display: block;
   width: 100%;
-  height: min(50vh, 400px);
+  height: min(80vh, 800px);
   border: 0;
 }
 
@@ -334,7 +335,7 @@ body {
   }
 
   .dataset-embed iframe {
-    height: min(45vh, 320px);
+    height: min(75vh, 600px);
   }
 
   .splat-viewer {
