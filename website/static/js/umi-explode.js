@@ -280,7 +280,7 @@ export async function mountExplode(host, opts = {}) {
   // Mouse drags orbit both ways; touch drags orbit sideways only, so vertical swipes still scroll the page.
   let orbAz = 0, orbEl = 0, velAz = 0, velEl = 0, drag = null, resetting = false, zoomFix = 1;
   // The model turns slowly on its own; any drag takes over, and it picks the turn back up after a pause.
-  const AUTO_SPEED = 6, AUTO_IDLE = 3500;   // degrees per second; ms of no interaction before it resumes
+  const AUTO_SPEED = 5.1, AUTO_IDLE = 3500;   // degrees per second; ms of no interaction before it resumes
   let autoSpd = 0, lastInteract = -Infinity, lastFrame = performance.now();
   canvas.addEventListener('pointerdown', (e) => {
     if (e.button !== 0) return;
