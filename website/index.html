@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="./static/css/bulma.min.css">
   <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-  <link rel="stylesheet" href="./static/css/index.css?v=20261026-remove-splat">
+  <link rel="stylesheet" href="./static/css/index.css?v=20261027-large-demos">
   <link rel="stylesheet" href="./static/css/umi-explode.css?v=20261026-orbit3">
   <link rel="icon" type="image/png" href="./static/images/umi-logo.png">
 
@@ -58,6 +58,11 @@
       </a>
     </span>
     <span class="link-block">
+      <a href="https://huggingface.co/datasets/brandonyang/umi-live-dataset" class="external-link button is-normal is-rounded is-dark">
+        <span class="icon" aria-hidden="true"><img src="./static/images/huggingface-logo.svg" alt="" width="20" height="20"></span><span>Dataset</span>
+      </a>
+    </span>
+    <span class="link-block">
       <a href="./hardware.html" class="button is-normal is-rounded is-dark">
         <span class="icon"><i class="fas fa-tools"></i></span><span>Hardware setup guide</span>
       </a>
@@ -101,52 +106,82 @@
   </div>
 </section>
 
-<section class="page-section" id="videos">
+<section class="page-section" id="using-umi-live">
   <div class="site-container">
-    <div class="demo-group">
+    <h2 class="section-title">Using UMI-Live</h2>
+    <p class="demo-group-description">UMI-Live is self-contained and designed for convenient, in-the-wild data collection. Attach the batteries, connect the power cables, and press one button to record. No external tracking infrastructure or calibration of the collection environment is required.</p>
+    <div class="video-card">
+      <video id="usage-video" controls muted playsinline preload="metadata" width="1920" height="1080" poster="./static/images/umi-live-how-to-poster.jpg?v=20261027-complete" aria-label="How to use UMI-Live: attach batteries, connect power cables, press to record, and complete a shirt-folding demonstration.">
+        <source src="./static/videos/umi-live-how-to.mp4?v=20261027-complete" type="video/mp4">
+        <a href="./static/videos/umi-live-how-to.mp4">Watch the UMI-Live how-to video</a>.
+      </video>
+    </div>
+  </div>
+</section>
+
+<section class="page-section" id="software-processing">
+  <div class="site-container software-processing-copy">
+    <h2 class="section-title">Automatic software processing</h2>
+  </div>
+  <figure class="software-processing-figure site-container">
+    <a href="./static/images/software-processing-diagram.png" target="_blank" rel="noopener noreferrer" aria-label="Open the full-resolution software processing diagram">
+    <img src="./static/images/software-processing-diagram.png" width="2376" height="1452" loading="lazy" alt="UMI-Live software pipeline: synchronized wrist camera, LiDAR, and IMU recording; queued episodes processed in parallel with ArUco-based gripper estimation and LiDAR-inertial SLAM; temporal alignment; and LeRobot dataset assembly, Hugging Face publication, and query-relative policy training targets.">
+    </a>
+  </figure>
+  <div class="site-container software-processing-copy">
+    <p>Keep collecting while completed recordings are processed in the background. Our server runs LiDAR decoding, trajectory reconstruction, and gripper estimation concurrently across hands and episodes, then assembles the results into training-ready datasets. Completed stages are tracked so interrupted processing can resume from available outputs.</p>
+    <p>The server checks synchronization evidence and corrects sensor timestamps before aligning the streams. LiDAR–inertial SLAM reconstructs each gripper’s motion, which is converted into a tool-center-point trajectory. ArUco detections estimate jaw opening, while the leader camera provides a common timeline for both wrist videos, poses, and gripper states.</p>
+    <p>Validated episodes combine synchronized wrist images, bimanual pose and gripper states, and task instructions in LeRobot format. The software can publish the dataset and raw-episode archive to Hugging Face, retaining the local dataset if publication fails. The full processing pipeline is available in our <a href="https://github.com/AfterQuery-Research/umi-live" target="_blank" rel="noopener noreferrer">UMI-Live repository</a>.</p>
+  </div>
+</section>
+
+<section class="page-section" id="videos">
+    <div class="demo-group media-container human-demonstrations" id="human-demonstrations">
       <div class="demo-group-heading">
         <h3>Human demonstrations</h3>
       </div>
       <div class="media-grid media-grid--three">
         <article class="video-card">
-          <video controls autoplay muted playsinline preload="auto" poster="./static/images/grasp-poster.jpg"><source src="./static/videos/precision-grasping-normal-speed.mp4?v=silent" type="video/mp4"></video>
+          <video controls muted playsinline preload="metadata" poster="./static/images/grasp-poster.jpg"><source src="./static/videos/precision-grasping-normal-speed.mp4?v=silent" type="video/mp4"></video>
           <div class="video-caption"><h4>Small-object handling</h4></div>
         </article>
         <article class="video-card">
-          <video controls autoplay muted playsinline preload="auto" poster="./static/images/match-poster.jpg"><source src="./static/videos/match-lighting-from-12s.mp4?v=silent" type="video/mp4"></video>
+          <video controls muted playsinline preload="metadata" poster="./static/images/match-poster.jpg"><source src="./static/videos/match-lighting-from-12s.mp4?v=silent" type="video/mp4"></video>
           <div class="video-caption"><h4>Match lighting</h4></div>
         </article>
         <article class="video-card">
-          <video controls autoplay muted playsinline preload="auto" poster="./static/images/shirt-poster.jpg"><source src="./static/videos/shirt-folding-timelapse.mp4" type="video/mp4"></video>
+          <video controls muted playsinline preload="metadata" poster="./static/images/shirt-poster.jpg"><source src="./static/videos/shirt-folding-timelapse.mp4" type="video/mp4"></video>
           <div class="video-caption"><h4>Shirt folding</h4></div>
         </article>
       </div>
     </div>
 
-    <div class="demo-group">
+    <div class="demo-group media-container recorded-demonstrations" id="recorded-demonstrations">
       <div class="demo-group-heading">
         <h3>Recorded demonstrations</h3>
       </div>
       <div class="media-grid media-grid--episodes">
         <article class="video-card">
-          <video controls autoplay muted playsinline preload="auto" poster="./static/images/teaser-fruit-poster.jpg">
+          <video controls muted playsinline preload="metadata" poster="./static/images/teaser-fruit-poster.jpg">
             <source src="./static/videos/fruit-episode.mp4" type="video/mp4">
           </video>
           <div class="video-caption"><h4>Fruit chopping</h4></div>
         </article>
         <article class="video-card">
-          <video controls autoplay muted playsinline preload="auto" poster="./static/images/bottle-poster.jpg">
+          <video controls muted playsinline preload="metadata" poster="./static/images/bottle-poster.jpg">
             <source src="./static/videos/bottle-episode.mp4" type="video/mp4">
           </video>
           <div class="video-caption"><h4>Bottle opening</h4></div>
         </article>
       </div>
     </div>
-  </div>
   <div class="dataset-explorer">
+    <div class="dataset-intro">
     <div class="dataset-explorer-heading">
       <h3>Explore a LeRobot episode</h3>
       <a href="https://huggingface.co/spaces/lerobot/visualize_dataset?path=%2Fbrandonyang%2Fumi-live-dataset%2Fepisode_0%3Ft%3D4" target="_blank" rel="noopener noreferrer">Open viewer ↗</a>
+    </div>
+    <p class="demo-group-description">We release 3,255 bimanual episodes (approximately 39.7 hours at 30 Hz) covering orange placement, water pouring, and towel folding, with synchronized wrist videos, bimanual pose and gripper states, and task instructions. The complete dataset is available on <a href="https://huggingface.co/datasets/brandonyang/umi-live-dataset" target="_blank" rel="noopener noreferrer">Hugging Face</a>.</p>
     </div>
     <div class="dataset-embed">
       <iframe id="dataset-viewer" src="https://lerobot-visualize-dataset.hf.space/?path=%2Fbrandonyang%2Fumi-live-dataset%2Fepisode_0%3Ft%3D4" title="LeRobot dataset visualizer: UMI-Live episode 0" loading="lazy" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
@@ -155,37 +190,60 @@
 </section>
 
 <section class="page-section" id="experiments">
-  <div class="site-container">
+  <div class="media-container">
     <h2 class="section-title">Experiments</h2>
     <div class="demo-group">
+      <div class="experiments-intro">
       <div class="demo-group-heading">
         <h3>Policy training and evaluation</h3>
       </div>
+      <p class="demo-group-description">We fine-tune π0.5 and MolmoAct2 on a shared representation of handheld UMI-Live demonstrations and robot teleoperation data. The policies use two wrist-camera images, gripper openings, and a task instruction, with no overhead-camera input. They predict coordinated action sequences for both arms: end-effector pose changes (delta EEF) relative to the pose at each policy query, together with absolute gripper openings. A remote policy server returns these sequences to a local client that controls the dual YAM arms.</p>
+      <p class="demo-group-description">We evaluate autonomous execution on a six-orange placement task, with randomized orange and bowl positions. π0.5 succeeds in 10/10 trials using a 90% UMI / 10% teleoperation training mixture. MolmoAct2 achieves 8/10 with a 75% / 25% mixture, compared with 0/10 for its released checkpoint without additional training.</p>
+      <div class="policy-results">
+        <table aria-describedby="policy-results-note">
+          <caption>Physical orange-to-bowl evaluation on dual i2RT YAM arms</caption>
+          <thead>
+            <tr><th scope="col">Policy</th><th scope="col">Training condition</th><th scope="col">UMI / teleoperation</th><th scope="col">Successful trials</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">MolmoAct2</th><td>Released checkpoint</td><td>—</td><td>0/10</td></tr>
+            <tr><th scope="row">π0.5</th><td>Fine-tuned</td><td>95% / 5%</td><td>9/10</td></tr>
+            <tr><th scope="row">π0.5</th><td>Fine-tuned</td><td>90% / 10%</td><td>10/10</td></tr>
+            <tr><th scope="row">MolmoAct2</th><td>Fine-tuned</td><td>75% / 25%</td><td>8/10</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="policy-results-note" id="policy-results-note">Success requires placing all six oranges in the bowl. Each fine-tuned condition receives 12,000 updates with a global batch size of 32. Evaluation uses ten trials and one training seed per condition.</p>
+      <p class="demo-group-description">We host the policy model remotely on Lambda Cloud. The training and inference code is available in our <a href="https://github.com/AfterQuery-Research/lerobot" target="_blank" rel="noopener noreferrer">policy training repository</a>.</p>
+      </div>
       <div class="media-grid media-grid--three">
         <article class="video-card">
-          <video controls autoplay muted playsinline preload="auto" poster="./static/images/orange-wrist-cams-only-poster.jpg"><source src="./static/videos/orange-wrist-cams-only.mp4" type="video/mp4"></video>
+          <video controls muted playsinline preload="metadata" poster="./static/images/orange-wrist-cams-only-poster.jpg"><source src="./static/videos/orange-wrist-cams-only.mp4" type="video/mp4"></video>
           <div class="video-caption"><h4>MolmoAct × UMI-Live</h4></div>
         </article>
         <article class="video-card">
-          <video controls autoplay muted playsinline preload="auto" poster="./static/images/orange-pi05-no-top-poster.jpg"><source src="./static/videos/orange-pi05-no-top-trimmed.mp4" type="video/mp4"></video>
+          <video controls muted playsinline preload="metadata" poster="./static/images/orange-pi05-no-top-poster.jpg"><source src="./static/videos/orange-pi05-no-top-trimmed.mp4" type="video/mp4"></video>
           <div class="video-caption"><h4>π0.5 × UMI-Live</h4></div>
         </article>
         <article class="video-card">
-          <video controls autoplay muted playsinline preload="auto" poster="./static/images/orange-eval-img8534-poster.jpg"><source src="./static/videos/orange-eval-img8534-trimmed.mp4" type="video/mp4"></video>
+          <video controls muted playsinline preload="metadata" poster="./static/images/orange-eval-img8534-poster.jpg"><source src="./static/videos/orange-eval-img8534-trimmed.mp4" type="video/mp4"></video>
           <div class="video-caption"><h4>MolmoAct × UMI-Live</h4></div>
         </article>
       </div>
     </div>
 
     <div class="demo-group">
+      <div class="teleoperation-intro">
       <div class="demo-group-heading"><h3>Teleoperation setup</h3></div>
+      <p class="demo-group-description">Our teleoperation setup pairs UMI-Live hardware with Vive trackers and base stations for live pose tracking instead of LiDAR. We optimize the system for low latency and high tracking accuracy, enabling precise teleoperation tasks such as lighting a match. We release the hardware configuration, setup instructions, and code in our <a href="https://github.com/AfterQuery-Research/umi-teleop" target="_blank" rel="noopener noreferrer">teleoperation repository</a> so others can reproduce the system.</p>
+      </div>
       <div class="media-grid">
         <article class="video-card">
-          <video controls autoplay muted playsinline preload="auto" poster="./static/images/orange-teleop-poster.jpg?v=faces-blurred"><source src="./static/videos/orange-teleop.mp4?v=faces-blurred" type="video/mp4"></video>
+          <video controls muted playsinline preload="metadata" poster="./static/images/orange-teleop-poster.jpg?v=faces-blurred"><source src="./static/videos/orange-teleop.mp4?v=faces-blurred" type="video/mp4"></video>
           <div class="video-caption"><h4>Teleoperated orange task</h4></div>
         </article>
         <article class="video-card">
-          <video controls autoplay muted playsinline preload="auto" poster="./static/images/robot-match-poster.jpg"><source src="./static/videos/robot-match-action.mp4" type="video/mp4"></video>
+          <video controls muted playsinline preload="metadata" poster="./static/images/robot-match-poster.jpg"><source src="./static/videos/robot-match-action.mp4" type="video/mp4"></video>
           <div class="video-caption"><h4>Robot match-lighting task</h4></div>
         </article>
       </div>
@@ -215,5 +273,6 @@
 </footer>
 
 <script type="module" src="./static/js/umi-explode.js?v=20261026-orbit3"></script>
+<script type="module" src="./static/js/scroll-video-playback.js?v=20261027"></script>
 </body>
 </html>
