@@ -14,6 +14,15 @@
    or narrower than its neighbours; the hardware guide keeps the narrower reading column. */
 .project-page {
   --content-width: 1200px;
+  /* Room for one figure once it is scrolled to. On short laptop windows a full-width figure would be
+     taller than this, so each big figure caps its width by its own aspect ratio and fits whole. */
+  --fit-height: max(20rem, calc(100vh - 3rem));
+}
+
+@supports (height: 100svh) {
+  .project-page {
+    --fit-height: max(20rem, calc(100svh - 3rem));
+  }
 }
 
 html {
@@ -173,7 +182,19 @@ body {
 
 /* White behind the video so nothing dark shows at its edges while it loads or scales. */
 .teaser video {
+  max-width: calc(var(--fit-height) * 1920 / 1104);
+  margin-inline: auto;
   background: #fff;
+}
+
+.exploded-figure img {
+  max-width: calc(var(--fit-height) * 2334 / 1350);
+  margin-inline: auto;
+}
+
+#using-umi-live .video-card {
+  max-width: calc(var(--fit-height) * 16 / 9);
+  margin-inline: auto;
 }
 
 .page-section {
@@ -240,6 +261,7 @@ body {
 }
 
 .software-processing-figure {
+  max-width: calc(var(--fit-height) * 2376 / 1456);
   margin: 1.5rem auto;
 }
 
