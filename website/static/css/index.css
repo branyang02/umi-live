@@ -112,6 +112,32 @@ body {
   border-color: var(--teal);
 }
 
+/* Sponsor credit: small and muted, part of the header's credits rather than a banner. */
+.publication-sponsor {
+  margin-top: .9rem;
+}
+
+.project-page .publication-sponsor a {
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+  color: var(--muted);
+  font-size: .8rem;
+  text-decoration: none;
+}
+
+.publication-sponsor img {
+  display: block;
+  width: auto;
+  height: 18px;
+  opacity: .75;
+  transition: opacity .16s ease;
+}
+
+.publication-sponsor a:hover img {
+  opacity: 1;
+}
+
 .publication-links .icon img {
   display: block;
   width: 20px;
@@ -429,6 +455,10 @@ body {
 
 .footer p {
   margin: 0;
+}
+
+.footer p + p {
+  margin-top: .35rem;
 }
 
 .footer a {
