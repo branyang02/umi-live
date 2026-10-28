@@ -10,6 +10,12 @@
   --card-gap: 1rem;
 }
 
+/* The project page shares one 1200px edge for text, figures and video grids, so nothing sits wider
+   or narrower than its neighbours; the hardware guide keeps the narrower reading column. */
+.project-page {
+  --content-width: 1200px;
+}
+
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 2rem;
@@ -170,7 +176,7 @@ body {
 
 #abstract .content {
   color: #43504f;
-  font-size: .99rem;
+  font-size: 1.05rem;
   line-height: 1.8;
 }
 
@@ -184,6 +190,7 @@ body {
 
 .software-processing-copy {
   color: #43504f;
+  font-size: 1.05rem;
   line-height: 1.8;
 }
 
@@ -195,10 +202,27 @@ body {
   margin: 1.5rem auto;
 }
 
-.software-processing-figure img {
+.software-processing-figure img,
+.software-processing-figure video {
   display: block;
   width: 100%;
   height: auto;
+  background: #fff;
+}
+
+/* The video builds the diagram up module by module; with reduced motion, show the still figure. */
+.software-processing-figure img {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .software-processing-figure img {
+    display: block;
+  }
+
+  .software-processing-figure video {
+    display: none;
+  }
 }
 
 .demo-group + .demo-group {
@@ -213,6 +237,7 @@ body {
   max-width: var(--content-width);
   margin: 0 0 1.25rem;
   color: #43504f;
+  font-size: 1.05rem;
   line-height: 1.7;
 }
 
@@ -314,7 +339,7 @@ body {
 }
 
 .media-container {
-  width: min(1800px, calc(100% - 2 * var(--page-gutter)));
+  width: min(var(--content-width), calc(100% - 2 * var(--page-gutter)));
   margin-inline: auto;
 }
 
@@ -369,7 +394,7 @@ body {
 }
 
 .dataset-explorer {
-  width: calc(100% - 2 * var(--page-gutter));
+  width: min(var(--content-width), calc(100% - 2 * var(--page-gutter)));
   margin: var(--section-space) auto 0;
 }
 
