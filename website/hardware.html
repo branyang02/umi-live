@@ -93,13 +93,14 @@
       <details class="document-preview" id="guide-preview">
         <summary>
           <span class="preview-title">Assembly guide</span>
-          <a class="preview-open" href="./static/docs/UMI-Live-Hardware-Instructions-v9.pdf?v=20261029" target="_blank" rel="noopener noreferrer">Open assembly guide &nearr;</a>
+          <a class="preview-open" href="./static/docs/UMI-Live-Hardware-Instructions-v9.pdf?v=20261030" target="_blank" rel="noopener noreferrer">Open assembly guide &nearr;</a>
         </summary>
-        <iframe src="./static/docs/UMI-Live-Hardware-Instructions-v9.pdf?v=20261029" title="UMI-Live Hardware Instructions v9 PDF preview" loading="lazy" allowfullscreen></iframe>
+        <iframe src="./static/docs/UMI-Live-Hardware-Instructions-v9.pdf?v=20261030" title="UMI-Live Hardware Instructions v9 PDF preview" loading="lazy" allowfullscreen></iframe>
       </details>
       <div class="build-subsection" id="tags">
         <h3>Print and fit the ArUco tags</h3>
-        <p>Print the tag PDF at <strong>100% / actual size</strong>, with Fit and Shrink disabled. Check the 50 mm scale before cutting and keep the white margins. Follow the assembly guide for placement and IDs.</p>
+        <p>Print the tag PDF at <strong>100% / actual size</strong>, with Fit and Shrink disabled. Check the 50 mm scale before cutting and keep the white margins. Follow the assembly guide for placement.</p>
+        <p><strong>Tag IDs:</strong> unit 1 (leader, left arm) uses IDs 2 and 3; unit 2 (follower, right arm) uses IDs 0 and 1. Either tag can go on either finger. These IDs match the software default in <code>config/gripper_tags.yaml</code>; edit that file if you need different IDs.</p>
       <details class="document-preview" id="tags-preview">
         <summary>
           <span class="preview-title">Printable ArUco tags</span>
@@ -112,8 +113,8 @@
         <h3>Charging</h3>
         <div class="build-copy">
           <ol>
-            <li>Switch OFF or disconnect the USB-C (powering the Raspberry Pi) and power jack (powering the LiDAR).</li>
-            <li>Plug the supplied charger into the battery's charging barrel socket.</li>
+            <li>Switch OFF, or disconnect the USB-C plug (powering the Raspberry Pi) and the male barrel jack (powering the LiDAR).</li>
+            <li>Plug the supplied charger into the battery's female barrel jack (charging socket).</li>
             <li>Unplug the charger before switching back ON.</li>
           </ol>
         </div>
