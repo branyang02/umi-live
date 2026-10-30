@@ -66,6 +66,17 @@ body {
   letter-spacing: .14em;
 }
 
+.publication-venue {
+  margin: 0 0 1.25rem;
+  color: #238636;
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  line-height: 1.5;
+}
+
+.publication-venue strong {
+  color: inherit;
+}
+
 .publication-authors {
   color: #4d5b5a;
   font-size: .98rem;
@@ -143,6 +154,10 @@ body {
   width: 20px;
   height: 20px;
   object-fit: contain;
+}
+
+.publication-links .arxiv-icon {
+  filter: brightness(0) invert(1);
 }
 
 .teaser {
